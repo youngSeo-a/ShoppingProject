@@ -11,8 +11,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ybh4953@gmail.com
-    password: smtclknpfjntqevx
+    username: 사용자 이메일
+    password: 구글 앱 비밀번호
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
