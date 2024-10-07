@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.web.code.mapper.wish.WishMapper">
+    <select id="wishGoodsSelect" resultType="integer">
+        select 1 from wish_info
+        where goods_num = #{goodsNum} and member_num = #{memberNum}
+    </select>
+    <insert id="wishInsert">
+        insert into wish_info (goods_num, member_num , wish_date )
+        values(#{goodsNum},#{memberNum},now())
+    </insert>
+    <delete id="wishDelete">
+        DELETE FROM wish_info
+        where goods_num = #{goodsNum} and member_num = #{memberNum}
+    </delete>
+    <delete id="wishGoodsDeletes" >
+        delete from wish_info
+        where member_num = #{memberNum}
+        and goods_num in
+        <foreach collection="goodsNums" item="goodsNum" close=")" open="(" index="index" separator=",">
+            #{goodsNum}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/empMain_layout}">
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<th:block layout:fragment="css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .containers {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        .containers h2 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #5a3fff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-group {
+            display: inline-block;
+            width: 120px;
+        }
+        .btn-group button {
+            width: 100%;
+        }
+        .register-button {
+            width: 100%;
+            background-color: #2577fd;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .register-button:hover {
+            background-color: #2550fd;
+        }
+    </style>
+</th:block>
+<div layout:fragment="content">
+    <th:block th:if="${session.auth.grade == 'emp'}">
+        <a th:href="@{goodsUpdate(goodsNum=${goodsCommand.goodsNum })}">상품 수정</a> |
+        <a th:href="@{'goodsDel/'+${goodsCommand.goodsNum }}">상품 삭제</a> |
+    </th:block>
+    <a href="javascript:history.back();">뒤로가기</a>
+    <div class="containers">
+        <h2>상품 상세보기</h2>
+        <div class="form-group">
+            <label class="label" for="goodsNum">상품번호</label>
+            <input type="text" id="goodsNum" class="form-control"
+                   name="goodsNum" th:value="${goodsCommand.goodsNum}" readonly="readonly"/>
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="goodsName">상품명</label>
+            <input type="text" class="form-control"
+                   name="goodsName" id="goodsName" th:value="${goodsCommand.goodsName}" readonly="readonly" />
+        </div>
+        <div class="form-group">
+            <label class="label" for="goodsPrice">상품가격</label>
+            <input type="text" class="form-control"
+                   id="goodsPrice"  name="goodsPrice" th:value="${goodsCommand.goodsPrice}"  readonly="readonly">
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="deliveryCost">배송비</label>
+            <input type="text" class="form-control"
+                   id="deliveryCost"  name="deliveryCost" th:value="${goodsCommand.deliveryCost}"  readonly="readonly">
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="goodsContent">상품설명</label>
+            <span class="form-control" id="goodsContent"  name="goodsContent"
+                  th:utext="${#strings.replace(goodsCommand.goodsContent,newLine,'&lt;br /&gt;')}"  readonly="readonly"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="visitCount">조회수</label>
+            <input type="text" class="form-control"
+                   id="visitCount"  name="visitCount" th:value="${goodsCommand.visitCount}"  readonly="readonly">
+        </div>
+        <th:block th:if="${session.auth.grade == 'emp'}">
+            <!-- 회원이 봐서는 안되는 부분에 조건 -->
+        <div class="form-group">
+            <label class="label" for="empNum">등록한 사원</label>
+            <input type="text" class="form-control"
+                   id="empNum"  name="empNum" th:value="${goodsCommand.empNum}"  readonly="readonly">
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="goodsRegist">등록일</label>
+            <input type="text" class="form-control"
+                   id="goodsRegist"  name="goodsRegist" th:value="${#dates.format(goodsCommand.goodsRegist,'yyyy-MM-dd')}"  readonly="readonly">
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="updateEmpNum">마지막 수정 사원</label>
+            <input type="text" class="form-control"
+                   id="updateEmpNum"  name="updateEmpNum" th:value="${goodsCommand.updateEmpNum}"  readonly="readonly">
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="goodsUpdateDate">마지막 수정일</label>
+            <input type="text" class="form-control"
+                   id="goodsUpdateDate"  name="goodsUpdateDate" th:value="${#dates.format(goodsCommand.goodsUpdateDate,'yyyy-MM-dd')}"  readonly="readonly">
+        </div>
+        </th:block>
+        <!-- 등록한 이미지 추가합니다. -->
+        <div class="form-group">
+            <img th:src="|/upload/${goodsCommand.goodsMainStore }|" style="width: 370px; height: 403px;" />
+        </div>
+        <div class="form-group">
+            <th:block th:each="goodsImage : ${#strings.arraySplit(goodsCommand.goodsImages,'-') }">
+                <img th:src="|/upload/${goodsImage}|" style="width: 370px; height: 403px;"/><br />
+            </th:block>
+        </div>
+    </div>
+</div>
+</html>

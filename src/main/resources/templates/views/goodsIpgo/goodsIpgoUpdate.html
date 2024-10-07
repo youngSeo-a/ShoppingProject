@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/empMain_layout}">
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<div layout:fragment="content">
+
+<form action="/goods/goodsIpgoModify" method="post">
+    입고번호 : <input type="text" name="goodsIpgoNum" readonly="readonly"
+                  th:value="${dto.ipgoNum }"/><br />
+    상품번호 : <input type="text" name="goodsNum" readonly="readonly"
+                  th:value="${dto.goodsNum }"/><br />
+    입고일 : <input type="date" name="ipgoDate"
+                 th:value="${#dates.format(dto.ipgoDate,'yyyy-MM-dd' )}" /><br />
+    입고 수량 : <input type="number" name="ipgoQty" th:value="${dto.ipgoQty }"/><br />
+    제조일 : <input type="datetime-local" name="madeDate"
+                 th:value="${#dates.format(dto.madeDate,'yyyy-MM-dd HH:mm:ss')}"/><br />
+    가격 : <input type="number" name="ipgoPrice" th:value="${dto.ipgoPrice }"/><br />
+    <input type="submit" value="수정완료" />
+</form>
+</div>
+</html>

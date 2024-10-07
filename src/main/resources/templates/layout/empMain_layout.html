@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title></title>
+<th:block th:replace="fragments/empConfig::config"></th:block>
+
+<body class="sb-nav-fixed">
+<div th:replace="fragments/empHeader::header"></div>
+<div id="layoutSidenav">
+    <div th:replace="fragments/empSidebar :: sidebar"></div>
+    <div id="layoutSidenav_content">
+        <div layout:fragment="content"></div>
+        <div th:replace="fragments/empfooter::footer"></div>
+    </div>
+</div>
+</body>
+</html>

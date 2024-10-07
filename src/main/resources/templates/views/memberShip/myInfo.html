@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/userMain_layout}">
+<link href="/css/empStyles.css" rel="stylesheet" />
+<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+<th:block layout:fragment="css">
+    <style>
+        .containers {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-family: Arial, sans-serif;
+        }
+        .containers h2 {
+            text-align: center;
+        }
+
+        .group {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #5a3fff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-group button {
+            width: 100%;
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Fonts START -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css">
+    <!-- Fonts END -->
+
+    <!-- Global styles START -->
+    <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Global styles END -->
+
+    <!--    Page level plugin styles START-->
+    <link href="/assets/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet">
+    <link href="/assets/plugins/owl.carousel/assets/owl.carousel.css" rel="stylesheet">
+    <link href="/assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css">
+    <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css"><!-- for slider-range -->
+    <!-- Page level plugin styles END -->
+
+    <!-- Theme styles START -->
+    <link href="/assets/pages/css/components.css" rel="stylesheet">
+    <link href="/assets/corporate/css/style.css" rel="stylesheet">
+    <link href="/assets/pages/css/style-shop.css" rel="stylesheet" type="text/css">
+    <link href="/assets/corporate/css/style-responsive.css" rel="stylesheet">
+    <link href="/assets/corporate/css/themes/red.css" rel="stylesheet" id="style-color">
+    <link href="/assets/corporate/css/custom.css" rel="stylesheet">
+    <!-- Theme styles END -->
+
+    <div class="ecommerce">
+        <div class="main">
+            <div class="container">
+                <!-- BEGIN SIDEBAR & CONTENT -->
+                <div class="row margin-bottom-40">
+                    <!-- BEGIN SIDEBAR -->
+                    <div class="sidebar col-md-3 col-sm-5">
+                        <ul class="list-group margin-bottom-25 sidebar-menu">
+                            <ul class="dropdown-menu" style="display:block;">
+                                <li class="list-group-item dropdown clearfix active">
+                                    <a href="shop-product-list.html" class="collapsed"><i class="fa fa-angle-right"></i> 나의 쇼핑 정보 </a>
+                                    <ul class="dropdown-menu" style="display:block;">
+                                        <li class="list-group-item dropdown clearfix">
+                                            <a href="shop-product-list.html"><i class="fa fa-angle-right"></i>장바구니</a>
+                                        </li>
+
+                                        <li class="list-group-item dropdown clearfix">
+                                            <a href="shop-product-list.html"><i class="fa fa-angle-right"></i> 주문/배송 </a>
+                                        </li>
+                                        <li class="list-group-item dropdown clearfix">
+                                            <a href="shop-product-list.html"><i class="fa fa-angle-right"></i>관심목록</a>
+                                        </li>
+                                        <li class="list-group-item dropdown clearfix active">
+                                            <a href="shop-product-list.html" ><i class="fa fa-angle-right"></i> 취소/반품  </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="list-group-item dropdown clearfix active">
+                                    <a href="shop-product-list.html" class="collapsed"><i class="fa fa-angle-right"></i>나의 혜택 정보 </a>
+                                    <ul class="dropdown-menu" style="display:block;">
+                                        <li class="list-group-item dropdown clearfix">
+                                            <a href="shop-product-list.html"><i class="fa fa-angle-right"></i> 적립금 </a>
+                                        </li>
+                                        <li class="list-group-item dropdown clearfix">
+                                            <a href="shop-product-list.html"><i class="fa fa-angle-right"></i> 쿠폰</a>
+                                        </li>
+                                        <li class="list-group-item dropdown clearfix active">
+                                            <a href="shop-product-list.html" ><i class="fa fa-angle-right"></i>혜택보기 </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="list-group-item dropdown clearfix active">
+                                    <a href="shop-product-list.html" class="collapsed"><i class="fa fa-angle-right"></i>나의 문의 관리 </a>
+                                </li>
+                                <li class="list-group-item dropdown clearfix active">
+                                    <a class="collapsed"><i class="fa fa-angle-right"></i>나의 활동 정보 </a>
+                                    <ul class="dropdown-menu" style="display:block;">
+                                        <li class="list-group-item dropdown clearfix">
+                                            <a href="/myPage/myDetail"><i class="fa fa-angle-right"></i> 내정보 보기 </a></li>
+
+                                        <li class="list-group-item dropdown clearfix">
+                                            <a href="/myPage/memberUpdate"><i class="fa fa-angle-right"></i> 내정보 수정</a></li>
+
+                                        <li class="list-group-item dropdown clearfix">
+                                            <a href="/myPage/userPwModify"><i class="fa fa-angle-right"></i> 비밀번호변경</a></li>
+
+                                        <li class="list-group-item dropdown clearfix">
+                                            <a href="/myPage/memberDrop"><i class="fa fa-angle-right"></i> 회원탈퇴</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </ul>
+                    </div>
+                    <!-- END SIDEBAR -->
+
+                    <!-- BEGIN CONTENT -->
+                    <div class="col-md-9 col-sm-7">
+                        <!--                        <div class="row justify-content-center">-->
+                        <!--                            <div class="col-lg-5">-->
+                        <div class="containers">
+                            <h2>나의 정보</h2>
+                            <div class="form-group">
+                                <div class="group" >이 름</div>
+                                <input type="text" class="form-control"
+                                       th:value="${memberCommand.memberName}"  readonly="readonly">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="group">아이디</div>
+                                <input type="text" class="form-control"
+                                       name="memberId" th:value="${memberCommand.memberId}" readonly="readonly" />
+                            </div>
+
+                            <div class="form-group">
+                                <div class="group" >주소</div>
+                                <input type="text" class="form-control" name="memberAddr" onclick="execDaumPostcode();"
+                                       th:value="${memberCommand.memberAddr}" readonly="readonly"/>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="group" >상세주소</div>
+                                <input type="text" class="form-control" name="memberAddr2" th:value="${memberCommand.memberAddr2}" readonly="readonly"/>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="group" >우편번호</div>
+                                <input type="text" class="form-control" name="memberPost"  th:value="${memberCommand.memberPost}"
+                                       readonly="readonly" />
+                            </div>
+
+                            <div class="form-group">
+                                <div class="group" >전화번호</div>
+                                <input type="tel" class="form-control"  name="memberPhone"
+                                       th:value="${memberCommand.memberPhone}" readonly="readonly"/>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="group">등록일</div>
+                                <input type="text" id="memberRegiDate" class="form-control"
+                                       name="memberRegiDate" th:value="${#dates.format(memberCommand.memberRegiDate,'yyyy-MM-dd')}" readonly="readonly"/>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="group" >생년월일</div>
+                                <input type="text" class="form-control" name="memberBirth"
+                                       th:value="${#dates.format(memberCommand.memberBirth,'yyyy-MM-dd')}" readonly="readonly">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="group" >이메일</div>
+                                <input type="email" class="form-control" name="memberEmail"
+                                       th:value="${memberCommand.memberEmail}" readonly="readonly"/>
+                            </div>
+
+                        </div>
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                        <!--                    </div>-->
+                    </div>
+                </div>
+                <!-- END CONTENT -->
+            </div>
+            <!-- END SIDEBAR & CONTENT -->
+        </div>
+    </div>
+</div>
+</html>
+
+<!--<!DOCTYPE html>-->
+<!--<html>MemberMyPageController-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Insert title here</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<ul>-->
+<!--    <li><a href="/myPage/myDetail">내정보 보기</a></li>-->
+<!--    <li><a href="/myPage/memberUpdate">내정보 수정</a></li>-->
+<!--    <li><a href="/myPage/userPwModify">비밀번호변경</a></li>-->
+<!--    <li><a href="/myPage/memberDrop">회원탈퇴</a></li>-->
+<!--    <li><a href="/">홈</a></li>-->
+<!--</ul>-->
+<!--내정보<br />-->
+<!--이름 : [[${memberCommand.memberName }]]<br />-->
+<!--아이디 : [[${memberCommand.memberId }]]<br />-->
+<!--주소 : [[${memberCommand.memberAddr }]]<br />-->
+<!--상세주소 : [[${memberCommand.memberAddr2 }]]<br />-->
+<!--우편번호 : [[${memberCommand.memberPost }]]<br />-->
+<!--연락처 : [[${memberCommand.memberPhone }]]<br />-->
+
+<!--&lt;!&ndash; #dates를 사용해서 원하는 날짜형식으로 날짜로 변환 2000-10-20&ndash;&gt;-->
+<!--등록일 : [[${#dates.format(memberCommand.memberRegiDate,'yyyy-MM-dd')}]]<br />-->
+<!--생년월일 : [[${#dates.format(memberCommand.memberBirth,'yyyy-MM-dd')}]]<br />-->
+<!--이메일 : [[${memberCommand.memberEmail }]]<br />-->
+<!--</body>-->
+<!--</html>-->

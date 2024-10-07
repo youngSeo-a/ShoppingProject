@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/userMain_layout}">
+<th:block layout:fragment="css">
+    <style>
+        a {
+            text-decoration-line: none;
+        }
+    </style>
+</th:block>
+<div layout:fragment="content">
+    <div style="text-align: center">
+        [[${userId }]]님 [[${price }]]원이 결제 완료되었습니다.<br />
+        <a href="/purchase/orderList">구매리스트로 가기</a> | <a href="/shopping">홈</a>
+    </div>
+</div>
+</html>

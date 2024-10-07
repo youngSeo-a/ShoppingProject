@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 20px;
+        }
+        .containers {
+            width: 775px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border: 0px;
+        }
+        h1 {
+            font-size: 24px;
+            text-align: center;
+            color: #333;
+        }
+        .review-item {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+            display: flex;
+            align-items: center;
+        }
+        .review-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            margin-right: 20px;
+            object-fit: cover;
+        }
+        .review-content {
+            flex-grow: 1;
+            line-height: 1.6;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<div class="containers">
+    <!-- Review 1 -->
+    <div class="review-item">
+        <th:block  th:each=" goodsImage : ${#strings.arraySplit(goodsCommand.goodsImages,'-')}">
+            <img th:src="|/upload/${goodsImage}|" class="review-image" />
+        </th:block>
+        <div class="review-content">
+            <span th:utext="${#strings.replace(goodsCommand.goodsContent ,newLine,'&lt;br /&gt;' )}" ></span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

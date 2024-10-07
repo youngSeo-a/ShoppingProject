@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/empMain_layout}">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<div layout:fragment="content">
+    <a href="/goods/goodsForm">상품 추가</a> ㅣ
+    <a href="/goods/goodsIpgo">상품 입고</a> ㅣ
+    <a href="/goods/goodsIpgoList">상품 입고 현황</a>
+
+    <div id="writeForm"></div>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $.ajax({
+                url:"/goods/goodsWrite",
+                dataType:"html",
+                success:function(result){
+                    $("#writeForm").html(result);
+                },
+                error:function(){
+                    alert("서버오류");
+                }
+            });
+        });
+    </script>
+</div>
+
+</html>

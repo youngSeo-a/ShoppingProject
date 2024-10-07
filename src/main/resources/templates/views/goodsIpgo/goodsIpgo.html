@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/empMain_layout}">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<th:block layout:fragment="css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .containers {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        .containers h2 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #5a3fff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-group button {
+            width: 100%;
+        }
+        .register-button {
+            width: 100%;
+            background-color: #2577fd;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .register-button:hover {
+            background-color: #2550fd;
+        }
+        .goodsNum {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+    <div class="containers">
+        <h3 class="mb-4">상품 입고</h3>
+        <form action="/goods/ipgoRegist" method="post">
+
+            <div>
+                <label class="label" for="goodsIpgoNum">입고번호</label>
+                <input type="text" class="form-control"
+                       name="goodsIpgoNum" id="goodsIpgoNum" th:value="${ipgoNum}"/>
+            </div>
+
+            <div class="form-group" >
+                <label class="label" for="goodsNum" >상품번호</label>
+                <div class="goodsNum">
+                    <input id="goodsNum" type="text" class="form-control" name="goodsNum" style="width: 85%">
+                    <button type="button" id="btn" style="margin-left: 7px;">검색</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="label" for="goodsName">상품명</label>
+                <input id="goodsName" type="text" class="form-control" name="goodsName">
+            </div>
+
+
+            <div class="form-group">
+                <label class="label" for="ipgoDate">입고일</label>
+                <input id="ipgoDate" type="date" class="form-control" name="ipgoDate">
+
+            </div>
+
+            <div class="form-group">
+                <label class="label" for="ipgoQty"> 입고 수량</label>
+                <input id="ipgoQty" type="number" class="form-control" name="ipgoQty">
+
+            </div>
+
+            <div class="form-group">
+                <label class="label" for="madeDate">제조일</label>
+                <input id="madeDate" type="datetime-local" class="form-control" name="madeDate">
+            </div>
+
+            <div class="form-group">
+                <label class="label" for="ipgoPrice">가격</label>
+                <input id="ipgoPrice" type="number" class="form-control" name="ipgoPrice">
+            </div>
+
+
+            <input type="submit" value="입고등록" class="register-button">
+        </form>
+        <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+        <script src="/js/daumAddressScript.js"></script>
+        <script type="text/javascript">
+            $(function(){
+                $("#btn").click(function(){
+                    window.open("goodsItem","상품검색","width=620, height=500, left=30, top=50");
+                });
+            });
+        </script>
+    </div>
+</div>
+</html>

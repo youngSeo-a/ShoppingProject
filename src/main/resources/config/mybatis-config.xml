@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+
+    <typeAliases>
+        <typeAlias type="project.web.code.dto.MemberDTO$Response" alias="memberDTO"/>
+        <typeAlias type="project.web.code.dto.StartEndPageDTO" alias="startEndPageDTO"/>
+        <typeAlias type="project.web.code.dto.AuthInfoDTO" alias="authInfo"/>
+        <typeAlias type="project.web.code.dto.EmployeeDTO$Response" alias="emp"/>
+        <typeAlias type="project.web.code.dto.GoodsDTO$Response" alias="goods"/>
+        <typeAlias type="project.web.code.dto.GoodsIpgoDTO" alias="goodsIpgo"/>
+        <typeAlias type="project.web.code.dto.GoodsDetailStockDTO" alias="goodsDetailStock"/>
+        <typeAlias type="project.web.code.dto.CartGoodsDTO" alias="cartGoods"/>
+        <typeAlias type="project.web.code.dto.CartDTO" alias="cart"/>
+        <typeAlias type="project.web.code.dto.PurchaseDTO" alias="purchase"/>
+        <typeAlias type="project.web.code.dto.PurchaseListDTO" alias="purchaseList"/>
+        <typeAlias type="project.web.code.dto.PaymentDTO" alias="payment"/>
+        <typeAlias type="project.web.code.dto.PurchaseListGoodsDTO" alias="purchaseListGoods"/>
+        <typeAlias type="project.web.code.dto.OrderListDTO" alias="orderList"/>
+        <typeAlias type="project.web.code.dto.ReviewDTO" alias="review"/>
+        <typeAlias type="project.web.code.dto.DeliveryDTO" alias="delivery"/>
+        <typeAlias type="project.web.code.dto.InquireDTO" alias="inquire"/>
+    </typeAliases>
+</configuration>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/empMain_layout}">
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<th:block layout:fragment="css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .containers {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        .containers h2 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #5a3fff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-group {
+            display: inline-block;
+            width: 120px;
+        }
+        .btn-group button {
+            width: 100%;
+        }
+        .register-button {
+            width: 100%;
+            background-color: #2577fd;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .register-button:hover {
+            background-color: #2550fd;
+        }
+    </style>
+</th:block>
+<div layout:fragment="content">
+    <a th:href="|/member/memberUpdate?memberNum=${memberCommand.memberNum}|">회원 수정</a> |
+    <!-- 회원 수정은 회원번호를 마치 주소 처럼 넘기는 방식을 사용한다. 쿼리스트링이 아닌 주소전달 방식 -->
+    <a th:href="|/member/memberdelete/${memberCommand.memberNum}|">회원 강제 탈퇴</a> |
+    <a href="/member/memberList">회원목록</a>
+    <div class="containers">
+        <h2>회원정보</h2>
+        <div class="form-group">
+            <label class="label" for="memberRegiDate">등록일</label>
+            <input type="text" id="memberRegiDate" class="form-control"
+                   name="memberRegiDate" th:value="${#dates.format(memberCommand.memberRegiDate,'yyyy-MM-dd')}" readonly="readonly"/>
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="memberNum">회원번호</label>
+            <input type="text" id="memberNum" class="form-control"
+                   name="memberNum" th:value="${memberCommand.memberNum}" readonly="readonly"/>
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="memberId">아이디</label>
+            <input type="text" class="form-control"
+                   name="memberId" id="memberId" th:value="${memberCommand.memberId}" readonly="readonly" />
+        </div>
+        <div class="form-group">
+            <label class="label" for="memberName">이 름</label>
+            <input type="text" class="form-control"
+                   id="memberName"  name="memberName" th:value="${memberCommand.memberName}"  readonly="readonly">
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="memberBirth">생년월일</label>
+            <input id="memberBirth" type="text" class="form-control" name="memberBirth"
+                   th:value="${#dates.format(memberCommand.memberBirth,'yyyy-MM-dd')}" readonly="readonly">
+        </div>
+
+
+        <div class="form-group">
+            <label class="label" for="memberEmail">이메일</label>
+            <input type="email" class="form-control" id= "memberEmail" name="memberEmail"
+                   th:value="${memberCommand.memberEmail}" readonly="readonly"/>
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="memberPhone">전화번호</label>
+            <input id="memberPhone" type="tel" class="form-control"  name="memberPhone"
+                   th:value="${memberCommand.memberPhone}" readonly="readonly"/>
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="sample4_roadAddress">주소</label>
+            <input id="sample4_roadAddress" type="text" class="form-control" name="memberAddr" onclick="execDaumPostcode();"
+                   th:value="${memberCommand.memberAddr}" readonly="readonly"/>
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="memberAddr2">상세주소</label>
+            <input id="memberAddr2" type="text" class="form-control" name="memberAddr2" th:value="${memberCommand.memberAddr2}" readonly="readonly"/>
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="sample4_postcode">우편번호</label>
+            <input id="sample4_postcode" type="text" class="form-control" name="memberPost"  th:value="${memberCommand.memberPost}"
+                   readonly="readonly" />
+        </div>
+
+        <!-- All JS Custom Plugins Link Here here -->
+        <script src="/assets/js/vendor/modernizr-3.5.0.min.js"></script>
+        <!-- Jquery, Popper, Bootstrap -->
+        <script src="/assets/js/vendor/jquery-1.12.4.min.js"></script>
+        <script src="/assets/js/popper.min.js"></script>
+        <script src="/assets/js/bootstrap.min.js"></script>
+        <!-- Jquery Mobile Menu -->
+        <script src="/assets/js/jquery.slicknav.min.js"></script>
+
+        <!-- Jquery Slick , Owl-Carousel Plugins -->
+        <script src="/assets/js/owl.carousel.min.js"></script>
+        <script src="/assets/js/slick.min.js"></script>
+
+        <!-- One Page, Animated-HeadLin -->
+        <script src="/assets/js/wow.min.js"></script>
+        <script src="/assets/js/animated.headline.js"></script>
+        <script src="/assets/js/jquery.magnific-popup.js"></script>
+
+        <!-- Scrollup, nice-select, sticky -->
+        <script src="/assets/js/jquery.scrollUp.min.js"></script>
+        <script src="/assets/js/jquery.nice-select.min.js"></script>
+        <script src="/assets/js/jquery.sticky.js"></script>
+
+        <!-- contact js -->
+        <script src="/assets/js/contact.js"></script>
+        <script src="/assets/js/jquery.form.js"></script>
+        <script src="/assets/js/jquery.validate.min.js"></script>
+        <script src="/assets/js/mail-script.js"></script>
+        <script src="/assets/js/jquery.ajaxchimp.min.js"></script>
+
+        <!-- Jquery Plugins, main Jquery -->
+        <script src="/assets/js/plugins.js"></script>
+        <script src="/assets/js/main.js"></script>
+    </div>
+</div>
+</html>
+
+

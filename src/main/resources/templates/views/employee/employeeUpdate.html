@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/empMain_layout}">
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<th:block layout:fragment="css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .containers {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        .containers h2 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #5a3fff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-group {
+            display: inline-block;
+            width: 120px;
+        }
+        .btn-group button {
+            width: 100%;
+        }
+        .register-button {
+            width: 100%;
+            background-color: #2577fd;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .register-button:hover {
+            background-color: #2550fd;
+        }
+    </style>
+</th:block>
+<div layout:fragment="content">
+
+    <div class="containers">
+        <h2>직원정보 수정</h2>
+        <form action="/employee/empModify" method="post" name="frm" th:object="${employeeCommand}">
+            <input type="hidden" name="empPw" value="1111!qqqq" />
+            <input type="hidden" name="empPwCon" value="111111" />
+            <div class="form-group">
+                <input type="hidden" id= "empNum"  name="empNum" th:value="${employeeCommand.empNum}"
+                       readonly="readonly"/>
+            </div>
+            <div class="form-group">
+                <label class="label" for="empId">직원아이디</label>
+                <input type="text" class="form-control"
+                       name="empId" id="empId" th:value="${employeeCommand.empId}" placeholder="아이디를 입력하세요."/></br>
+                <span style="color:red"  th:if="${#fields.hasErrors('empId')}"
+                      th:errors="*{empId}"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="label" for="empName">직원이름</label>
+                <input id="empName" type="text" class="form-control" placeholder="이름을 입력하세요." name="empName"
+                       th:value="${employeeCommand.empName}"></br>
+                <span style="color:red" th:if="${#fields.hasErrors('empName')}"
+                      th:errors="*{empName}"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="label" for="empEmail">이메일</label>
+                <input type="email" class="form-control" id= "empEmail" placeholder="이메일을 입력하세요." name="empEmail"
+                       th:value="${employeeCommand.empEmail}" /></br>
+                <span style="color:red" th:if="${#fields.hasErrors('empEmail')}"
+                      th:errors="*{empEmail}"></span>
+                <span id="emailCheck"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="label" for="empPhone">연락처</label>
+                <input id="empPhone" type="tel" class="form-control" placeholder="전화번호를 입력하세요. " name="empPhone"
+                       th:value="${employeeCommand.empPhone}"/></br>
+                <span style="color:red" th:if="${#fields.hasErrors('empPhone')}"
+                      th:errors="*{empPhone}"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="label" for="sample4_roadAddress">직원주소</label>
+                <input id="sample4_roadAddress" type="text" class="form-control" placeholder="주소를 입력하세요." name="empAddr" onclick="execDaumPostcode();"
+                       th:value="${employeeCommand.empAddr}" readonly="readonly"/></br>
+                <span style="color:red" th:if="${#fields.hasErrors('empAddr')}"
+                      th:errors="*{memberAddr}"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="label" for="empAddrDetail">상세주소</label>
+                <input id="empAddrDetail" type="text" class="form-control" placeholder="상세주소 입력하세요." name="empAddrDetail" th:value="${employeeCommand.empAddrDetail}"/><br />
+            </div>
+
+            <div class="form-group">
+                <label class="label" for="sample4_postcode">우편번호</label>
+                <input id="sample4_postcode" type="text" class="form-control" placeholder="" name="empPost"  th:value="${employeeCommand.empPost}"
+                       readonly="readonly" />
+            </div>
+
+            <div class="form-group">
+                <label class="label" for="empJumin">주민번호</label>
+                <input id="empJumin" type="text" class="form-control" placeholder="주민번호를 입력해주세요." name="empJumin"
+                       th:if="${#fields.hasErrors('empJumin')}"></br>
+                <span style="color:red" th:if="${#fields.hasErrors('empJumin')}"
+                      th:errors="*{empJumin}"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="label" for="empRegiDate">입사일</label>
+                <input id="empRegiDate" type="date" class="form-control" placeholder="주민번호를 입력해주세요." name="empRegiDate"
+                       th:value="${#dates.format(employeeCommand.empRegiDate,'yyyy-MM-dd')}" ></br>
+                <span style="color:red" th:if="${#fields.hasErrors('empRegiDate')}"
+                      th:errors="*{empRegiDate}"></span>
+            </div>
+
+            <input type="submit" value="직원정보 수정" class="register-button">
+        </form>
+    </div>
+    <!-- All JS Custom Plugins Link Here here -->
+    <script src="/assets/js/vendor/modernizr-3.5.0.min.js"></script>
+    <!-- Jquery, Popper, Bootstrap -->
+    <script src="/assets/js/vendor/jquery-1.12.4.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <!-- Jquery Mobile Menu -->
+    <script src="/assets/js/jquery.slicknav.min.js"></script>
+
+    <!-- Jquery Slick , Owl-Carousel Plugins -->
+    <script src="/assets/js/owl.carousel.min.js"></script>
+    <script src="/assets/js/slick.min.js"></script>
+
+    <!-- One Page, Animated-HeadLin -->
+    <script src="/assets/js/wow.min.js"></script>
+    <script src="/assets/js/animated.headline.js"></script>
+    <script src="/assets/js/jquery.magnific-popup.js"></script>
+
+    <!-- Scrollup, nice-select, sticky -->
+    <script src="/assets/js/jquery.scrollUp.min.js"></script>
+    <script src="/assets/js/jquery.nice-select.min.js"></script>
+    <script src="/assets/js/jquery.sticky.js"></script>
+
+    <!-- contact js -->
+    <script src="/assets/js/contact.js"></script>
+    <script src="/assets/js/jquery.form.js"></script>
+    <script src="/assets/js/jquery.validate.min.js"></script>
+    <script src="/assets/js/mail-script.js"></script>
+    <script src="/assets/js/jquery.ajaxchimp.min.js"></script>
+
+    <!-- Jquery Plugins, main Jquery -->
+    <script src="/assets/js/plugins.js"></script>
+    <script src="/assets/js/main.js"></script>
+</div>
+</html>

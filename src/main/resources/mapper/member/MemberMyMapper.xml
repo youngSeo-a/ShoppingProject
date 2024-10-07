@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.web.code.mapper.member.MemberMyMapper">
+
+    <sql id="memberColumnsBase">
+        member_num,member_id,member_pw,member_name,member_addr,
+        member_addr_detail,member_post,member_phone,
+        member_regist_date ,member_birth,member_email,
+        member_email_conf,member_point
+    </sql>
+
+    <select id="memberInfo" parameterType="string" resultType="memberDTO">
+        select <include refid="memberColumnsBase" /> <!-- 정의한 컬럼을 불러올 수 있습니다. -->
+        from member_info
+        where member_id = #{memberId}
+    </select>
+    <update id="memberPwUpdate" >
+        update member_info
+        set member_pw = #{userPw}
+        where member_id = #{memberId}
+    </update>
+    <delete id="memberDrop" parameterType="string">
+        delete from member_info
+        where member_id = #{memberId}
+    </delete>
+    <update id="memberInfoUpdate" parameterType="memberDTO">
+        update member_info
+        <trim prefix="set"  suffixOverrides=",">
+            member_name = #{memberName},
+            member_addr = #{memberAddr},
+            <choose>
+                <when test="memberAddrDetail != null"> <!-- null이 아닐 경우에만 수정 -->
+                    member_addr_detail = #{memberAddrDetail},
+                </when>
+                <otherwise> <!-- null인경우에는 null로 : else와 같은 의미이다.-->
+                    member_addr_detail = null,
+                </otherwise>
+            </choose>
+            member_post = #{memberPost},
+            member_phone = #{memberPhone},
+            member_email =#{memberEmail},
+            member_birth = #{memberBirth},
+        </trim>
+        <where>
+            member_id = #{memberId}
+        </where>
+    </update>
+</mapper>

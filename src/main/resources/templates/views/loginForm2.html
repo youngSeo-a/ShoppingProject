@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/empMain_layout}">
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<link rel="stylesheet" href="/css/style.css">
+<th:block layout:fragment="css">
+<style>
+
+	.checkbox-group {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 15px;
+	}
+
+	.checkbox-group input[type="checkbox"] {
+		accent-color: #3fb6c6;
+		margin-right: 5px;
+	}
+	.login-btn {
+		width: 100%;
+		background-color: #2577fd;
+		color: white;
+		border: none;
+		padding: 10px;
+		font-size: 16px;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+
+	.login-btn:hover {
+		background-color: #2550fd;
+	}
+</style>
+</th:block>
+<div layout:fragment="content">
+	<section class="ftco-section">
+		<form action="/login/login" method="post" th:object="${loginCommand}" >
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-md-7 col-lg-5">
+						<div class="login-wrap p-4 p-md-5">
+							<div class="d-flex">
+								<div class="w-100">
+									<h3 class="mb-4">로그인</h3>
+								</div>
+							</div>
+							<form action="#" class="login-form">
+								<div class="form-group">
+									<div class="icon d-flex align-items-center justify-content-center"></div>
+									<input type="text" class="form-control rounded-left" name="userId" placeholder="아이디" th:value="${loginCommand.userId}" required><br />
+									<span th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}" ></span></td>
+								</div>
+								<div class="form-group">
+									<div class="icon d-flex align-items-center justify-content-center"></div>
+									<input type="password" class="form-control rounded-left" name="userPw" placeholder="비밀번호" th:value="${loginCommand.userPw}" required><br />
+									<span th:if="${#fields.hasErrors('userPw')}" th:errors="*{userPw}" ></span></td></tr>
+								</div>
+								<div>
+									<input type="submit" class="login-btn" value="로그인">
+								</div>
+								<div class="checkbox-group">
+									<label><input type="checkbox" name="idStore"
+												  th:checked="${loginCommand.idStore != null && loginCommand.idStore}"/>아이디 저장</label>
+									<label><input type="checkbox" name="autoLogin" /> 자동로그인</label>
+								</div>
+								<div class="form-group mt-4">
+									<div class="w-100 text-center">
+										<span><a href="/help/findId">아이디 찾기 / </a></span>
+										<span><a href="/help/findPassword">비밀번호 찾기</a></span>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</section>
+</div>
+</html>
+

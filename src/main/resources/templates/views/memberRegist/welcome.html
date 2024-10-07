@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/userMain_layout}">
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<div layout:fragment="content">
+    <div style="text-align: center">
+        <br/>
+        <br/>
+    [[${userName}]]님 가입이 되었습니다.<br />
+    [[${userName}]]님 쇼핑몰의 가입을 환영합니다.<br />
+    가입을 완료하시려면[[${userEmail}]] 이메일에서 가입을 확인해 주셔야 완료가 됩니다.<br />
+    <a href="/shopping">메인으로 가기</a>
+</div>
+</div>
+
+</html>

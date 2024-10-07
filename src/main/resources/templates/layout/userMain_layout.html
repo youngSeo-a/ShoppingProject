@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title></title>
+<th:block th:replace="fragments/userConfig::config"></th:block>
+
+<body class="sb-nav-fixed">
+<div th:replace="fragments/userHeader::header"></div>
+<div id="layoutSidenav">
+<!--    <div th:replace="fragments/userSidebar :: sidebar"></div>-->
+
+        <div layout:fragment="content"></div>
+        <div th:replace="fragments/userfooter::footer"></div>
+ </div>
+</body>
+</html>

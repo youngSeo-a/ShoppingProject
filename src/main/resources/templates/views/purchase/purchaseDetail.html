@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 상세보기</title>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 20px;
+        }
+        .container {
+            width: 800px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        hr {
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .section-title {
+            font-weight: bold;
+            color: #007bff;
+            margin-top: 20px;
+        }
+        .btn {
+            display: block;
+            width: 150px;
+            padding: 10px;
+            text-align: center;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px auto;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .close-btn {
+            background-color: #e74c3c;
+        }
+        .close-btn:hover {
+            background-color: #c0392b;
+        }
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>상세보기</h1>
+
+    <!-- 구매상품 정보 -->
+    <h2 class="section-title">구매상품 정보</h2>
+    <table>
+        <tbody>
+        <th:block th:each=" dto  : ${dto.purchaseListGoodsDTOs}">
+        <tr>
+            <td><img th:src="|/upload/${dto.goods.goodsMainStore}|" alt="상품 이미지" style="max-width: 150px;"></td>
+            <td>
+                제품가격: [[${#numbers.formatCurrency(dto.goods.goodsPrice)}]]원<br />
+                주문수량: [[${dto.purchaseList.purchaseQty}]]개<br />
+                배송비:
+                <span th:if="${dto.goods.deliveryCost == 0}">무료배송</span>
+                <span th:if="${dto.goods.deliveryCost != 0}">[[${dto.goods.deliveryCost}]]원</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <b>상품설명</b><br />
+                <span th:utext="${#strings.replace(dto.goods.goodsContent,newLineChar,'<br />')}"></span>
+            </td>
+        </tr>
+        </th:block>
+        </tbody>
+    </table>
+
+    <!-- 주문내용 -->
+    <h2 class="section-title">주문내용</h2>
+    <table>
+        <tbody>
+        <tr><td>주문번호:</td><td>[[${dto.purchaseDTO.purchaseNum}]]</td></tr>
+        <tr><td>주문날짜:</td><td>[[${#dates.format(dto.purchaseDTO.purchaseDate,'yyyy-MM-dd')}]]</td></tr>
+        <tr><td>주문금액:</td><td>[[${dto.purchaseDTO.purchasePrice}]]원</td></tr>
+        <tr><td>배송지:</td><td>[[${dto.purchaseDTO.deliveryAddr}]] [[${dto.purchaseDTO.deliveryAddrDetail}]]</td></tr>
+        <tr><td>연락처:</td><td>[[${dto.purchaseDTO.deliveryPhone}]]</td></tr>
+        <tr><td>받는사람:</td><td>[[${dto.purchaseDTO.deliveryName}]]</td></tr>
+        <tr><td>주문메세지:</td><td>[[${dto.purchaseDTO.message}]]</td></tr>
+        </tbody>
+    </table>
+
+    <!-- 결제내용 -->
+    <h2 class="section-title">결제내용</h2>
+    <div th:if="${dto.paymentDTO.appldate != null}">
+        <table>
+            <tbody>
+            <tr><td>결제번호:</td><td>[[${dto.paymentDTO.confirmnumber}]]</td></tr>
+            <tr><td>결제방법:</td><td>[[${dto.paymentDTO.paymethod}]]</td></tr>
+            <tr><td>결제금액:</td><td>[[${dto.paymentDTO.totalprice}]]원</td></tr>
+            <tr><td>결제일:</td><td>[[${dto.paymentDTO.appldate}]] [[${dto.paymentDTO.appltime}]]</td></tr>
+            <tr><td>카드번호:</td><td>**** **** **** [[${dto.paymentDTO.cardnum}]]</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${dto.paymentDTO.appldate == null}">결제 정보가 없습니다.</div>
+
+    <!-- 배송정보 -->
+    <div th:if="${dto.paymentDTO.appldate != null}">
+        <h2 class="section-title">배송정보</h2>
+        <div th:if="${dto.deliveryDTO.deliveryNumber != null}">
+            <form action="/delivery/deliveryDel" method="post">
+                <input type="hidden" name="purchaseNum" th:value="${dto.purchaseDTO.purchaseNum}"/>
+                <table>
+                    <tr><td colspan="2">배송정보</td></tr>
+                    <tr><td>택배사</td><td>[[${dto.deliveryDTO.deliveryCompany}]]</td></tr>
+                    <tr><td>송장번호</td><td>[[${dto.deliveryDTO.deliveryNumber}]]</td></tr>
+                    <!-- 구매 확정이 되면 삭제 할 수 없게 합니다. -->
+                    <th:block th:if="${dto.purchaseDTO.purchaseStatus != '구매확정' and dto.deliveryDTO.deliveryState != '배송완료'} ">
+                        <tr><td colspan="2"><input type="submit" value="배송정보삭제" /></td></tr>
+                    </th:block>
+                </table>
+            </form>
+        </div>
+        <div th:if="${dto.deliveryDTO.deliveryNumber == null and dto.paymentDTO.appldate != null} ">
+            <form action="/delivery/deliveryAction" method="post">
+                <input type="hidden" name="purchaseNum" th:value="${dto.purchaseDTO.purchaseNum}">
+                <table>
+                    <tr><td>배송정보입력</td></tr>
+                    <tr><td>배송회사:</td>
+                        <td>
+                            <select name="deliveryCompany">
+                                <option>한진택배</option>
+                                <option>대한통운택배</option>
+                                <option>우체국택배</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><td>송장번호:</td><td><input type="text" name="deliveryNumber" required="required"></td></tr>
+                    <tr><td colspan="2" class="center"><input type="submit" value="배송정보등록" class="btn"></td></tr>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <!-- Close Button -->
+    <button type="button" id="btn" class="btn close-btn">닫기</button>
+</div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#btn").click(function() {
+            opener.location.reload();
+            window.close();
+        });
+    });
+</script>
+</html>

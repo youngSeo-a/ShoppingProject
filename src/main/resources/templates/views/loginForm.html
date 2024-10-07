@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/userMain_layout}">
+<!--	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">-->
+
+<!--	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">-->
+<!--	<link rel="stylesheet" href="/css/style.css">-->
+<th:block layout:fragment="css">
+<style>
+	.checkbox-group {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 15px;
+	}
+
+	.checkbox-group input[type="checkbox"] {
+		accent-color: #3fb6c6;
+		margin-right: 5px;
+	}
+	.login-btn {
+		width: 100%;
+		background-color: #2577fd;
+		color: white;
+		border: none;
+		padding: 10px;
+		font-size: 16px;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+
+	.login-btn:hover {
+		background-color: #2550fd;
+	}
+</style>
+</th:block>
+<div layout:fragment="content">
+	<section class="ftco-section">
+		<form action="/login/item.login" method="post" th:object="${loginCommand}" >
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-md-7 col-lg-5">
+						<div class="login-wrap p-4 p-md-5">
+							<div class="d-flex">
+								<div class="w-100">
+									<h3 class="mb-4">로그인</h3>
+								</div>
+							</div>
+							<form action="#" class="login-form">
+								<div class="form-group">
+									<div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-user"></span></div>
+									<input type="text" class="form-control rounded-left" name="userId" placeholder="아이디" th:value="${loginCommand.userId}" required><br />
+									<span th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}" ></span></td>
+								</div>
+								<div class="form-group">
+									<div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-lock"></span></div>
+									<input type="password" class="form-control rounded-left" name="userPw" placeholder="비밀번호" th:value="${loginCommand.userPw}" required><br />
+									<span th:if="${#fields.hasErrors('userPw')}" th:errors="*{userPw}" ></span></td></tr>
+								</div>
+								<div>
+									<input type="submit" class="login-btn" value="로그인">
+								</div>
+								<div class="checkbox-group">
+									<label><input type="checkbox" name="idStore"
+												  th:checked="${loginCommand.idStore != null && loginCommand.idStore}"/>아이디 저장</label>
+									<label><input type="checkbox" name="autoLogin" /> 자동로그인</label>
+								</div>
+
+
+								<div class="form-group mt-4">
+									<div class="w-100 text-center">
+										<p class="">회원이 아니신가요? <a href="/register/userWrite">회원가입</a></p>
+										<span><a href="/help/findId">아이디 찾기 / </a></span>
+										<span><a href="/help/findPassword">비밀번호 찾기</a></span>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</section>
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/popper.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/main.js"></script>
+	<script src="/assets/js/vendor/modernizr-3.5.0.min.js"></script>
+	<!-- Jquery, Popper, Bootstrap -->
+	<script src="/assets/js/vendor/jquery-1.12.4.min.js"></script>
+	<script src="/assets/js/popper.min.js"></script>
+	<script src="/assets/js/bootstrap.min.js"></script>
+	<!-- Jquery Mobile Menu -->
+	<script src="/assets/js/jquery.slicknav.min.js"></script>
+
+	<!-- Jquery Slick , Owl-Carousel Plugins -->
+	<script src="/assets/js/owl.carousel.min.js"></script>
+	<script src="/assets/js/slick.min.js"></script>
+
+	<!-- One Page, Animated-HeadLin -->
+	<script src="/assets/js/wow.min.js"></script>
+	<script src="/assets/js/animated.headline.js"></script>
+	<script src="/assets/js/jquery.magnific-popup.js"></script>
+
+	<!-- Scrollup, nice-select, sticky -->
+	<script src="/assets/js/jquery.scrollUp.min.js"></script>
+	<script src="/assets/js/jquery.nice-select.min.js"></script>
+	<script src="/assets/js/jquery.sticky.js"></script>
+
+	<!-- contact js -->
+	<script src="/assets/js/contact.js"></script>
+	<script src="/assets/js/jquery.form.js"></script>
+	<script src="/assets/js/jquery.validate.min.js"></script>
+	<script src="/assets/js/mail-script.js"></script>
+	<script src="/assets/js/jquery.ajaxchimp.min.js"></script>
+
+	<!-- Jquery Plugins, main Jquery -->
+	<script src="/assets/js/plugins.js"></script>
+	<script src="/assets/js/main.js"></script>
+</div>
+</html>
+

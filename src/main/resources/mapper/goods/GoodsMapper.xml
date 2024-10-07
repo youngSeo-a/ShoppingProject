@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.web.code.mapper.goods.GoodsMapper">
+    <!--   컬럼 정의.-->
+    <select id="ipgoAndGoodsAutoNum" resultType="string">
+        SELECT CONCAT(#{sep}, COALESCE(MAX(CAST(SUBSTRING(${columnName}, ${seq}) AS UNSIGNED)), 100000) + 1)
+        FROM ${tableName}
+    </select>
+    <sql id="goodsColumnsBase">
+        goods_num, goods_name, goods_price,goods_content, delivery_cost, emp_num
+        ,goods_regist, goods_main_store,goods_main_store_img, goods_images
+        ,goods_images_img, visit_count,update_emp_num, goods_update_date
+    </sql>
+    <insert id="goodsInsert" parameterType="goods">
+        insert into goods_info (<include refid="goodsColumnsBase" />)
+        values(#{goodsNum}, #{goodsName}, #{goodsPrice}, #{goodsContent}, #{deliveryCost}, #{empNum}, now()
+        , #{goodsMainStore},#{goodsMainStoreImg}
+        <!-- 이미지가 있는 경우에만 저장하도록 if문을 사용. -->
+        <if test="goodsImages != null">,#{goodsImages},#{goodsImagesImg}</if>
+        <if test="goodsImages == null">,null,null</if>
+        ,0,null,null)<!-- 이제 이미지를 추가. -->
+    </insert>
+
+    <select id="selectAll" resultType="goods">
+        select <include refid="goodsColumnsBase" /> from
+         goods_info
+        <where>
+            <if test="searchWord != null">
+                goods_name like '%' || #{searchWord} || '%'
+                or goods_num like '%' || #{searchWord} || '%'
+            </if>
+        </where>
+        order by goods_num
+        limit #{start}, #{end}
+    </select>
+
+    <select id="allSelect" resultType="goods">
+        select * from (
+        select ROW_NUMBER() over (order by goods_num desc) as rn,
+        <include refid="goodsColumnsBase" />
+        from goods_info
+        <where>
+            <if test="searchWord != null">
+                goods_name like '%' || #{searchWord} || '%'
+                or goods_num like '%' || #{searchWord} || '%'
+            </if>
+        </where>
+        )sub1
+        where rn between #{startRow}  and #{endRow}
+    </select>
+
+    <select id="goodsCount" parameterType="string" resultType="integer">
+        select count(*) from goods_info
+        <where>
+            <if test="searchWord != null">
+                goods_name like '%' || #{searchWord} || '%'
+                or goods_num like '%' || #{searchWord} || '%'
+            </if>
+        </where>
+    </select>
+
+    <delete id="productsDelete" parameterType="string">
+        delete from goods_info <!-- foreach문을 사용해서 in연산자를 사용. -->
+        where goods_num in <foreach collection="products" item="goodsNum" open="(" close=")" index="index"
+                                    separator=",">
+        #{goodsNum}
+    </foreach>
+    </delete>
+
+    <!-- dto에 직접 넣어 가지고 오는 것이 아니라 setter를 이용. -->
+    <resultMap type="goods" id="goodsResultMap">
+        <constructor><!-- 멤버필드가 추가가 되었으므로 생성자를 사용하기 위해서도 추가.  -->
+            <idArg column="goods_num" javaType="string"/>
+            <arg column="goods_name" javaType="string"/>
+            <arg column="goods_price" javaType="integer"/>
+            <arg column="delivery_cost" javaType="integer"/>
+            <arg column="goods_content" javaType="string"/>
+            <arg column="emp_num" javaType="string"/>
+            <arg column="visit_count" javaType="integer"/>
+            <arg column="goods_regist" javaType="java.util.Date"/>
+            <arg column="update_emp_num" javaType="string"/>
+            <arg column="goods_update_date" javaType="java.util.Date"/>
+            <arg column="goods_main_store" javaType="string"/>
+            <arg column="goods_main_store_img" javaType="string"/>
+            <arg column="goods_images" javaType="string"/>
+            <arg column="goods_images_img" javaType="string"/>
+        </constructor>
+    </resultMap>
+    <select id="selectOne" parameterType="string" resultMap="goodsResultMap">
+        select <include refid="goodsColumnsBase" />
+        from goods_info
+        where goods_Num = #{goodsNum}
+    </select>
+
+    <update id="goodsUpdate" parameterType="goods">
+        update goods_info<!-- 수정할 파일정보를 추가. -->
+        set GOODS_NAME = #{goodsName}, GOODS_PRICE = #{goodsPrice}
+        ,delivery_cost =#{deliveryCost}, GOODS_CONTENT = #{goodsContent}
+        ,update_emp_num = #{updateEmpNum}, goods_update_date = now()
+        <if test="goodsMainStore != null">
+            ,goods_main_store = #{goodsMainStore}
+            ,goods_main_store_img = #{goodsMainStoreImg}
+        </if>
+        <if test="goodsImages != null">
+            ,goods_images = #{goodsImages}
+            ,goods_images_img = #{goodsImagesImg}
+        </if>
+        where goods_num = #{goodsNum}
+    </update>
+    <delete id="goodsDelete" parameterType="string">
+        delete from goods_info
+        where goods_num = #{goodsNum}
+    </delete>
+    <resultMap type="goodsDetailStock" id="goodsStockResultMap">
+        <result column="stock" property="stock"/> <!-- 재고 -->
+        <!-- 객체내의 객체는 association으로 정의-->
+        <association property="goodsDTO" javaType="goods" resultMap="goodsResultMap"/>
+    </resultMap>
+    <select id="goodsDetailStock" parameterType="string" resultMap="goodsStockResultMap">
+        <!-- 이제 상품 정보와 같이 가져온다. -->
+        select 	g.goods_num , goods_name , goods_price ,goods_content , delivery_cost , emp_num
+        ,goods_regist , goods_main_store ,goods_main_store_img , goods_images
+        ,goods_images_img , visit_count ,update_emp_Num , goods_Update_Date
+        ,coalesce(stock ,0 ) stock
+        from goods_info g left outer join (
+        select ip.goods_num , iqty - coalesce(pqty,0) stock
+        from (
+        select goods_num, sum(IPGO_QTY) iqty from  goodsIpgo_info
+        group by goods_num)ip left outer join
+        (select goods_num, sum(purchase_qty) pqty from purchase_list
+        group by goods_num)pl
+        on ip.goods_num = pl.goods_num
+        )s
+        on g.goods_num = s.goods_num
+        where g.goods_num = #{goodsNum}
+    </select>
+    <update id="visitCount" parameterType="string">
+        update goods_info
+        set visit_count = visit_count + 1
+        where goods_num = #{goodsNum}
+    </update>
+    <!-- 서브쿼리를 이용해서 상품정보를 가져옴. -->
+    <select id="wishGoodsList" parameterType="string" resultMap="goodsResultMap">
+        select <include refid="goodsColumnsBase" />
+        from goods_info
+        where goods_num in (select goods_num from wish_info where member_num = #{memberNum})
+    </select>
+</mapper>

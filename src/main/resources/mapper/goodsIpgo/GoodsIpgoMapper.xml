@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.web.code.mapper.goodsIpgo.GoodsIpgoMapper">
+
+    <insert id="goodsIpgoInsert" parameterType="goodsIpgo">
+        insert into goodsIpgo_info (ipgo_num, goods_num, ipgo_qty, ipgo_date, made_date, ipgo_price, emp_num)
+        values(#{ipgoNum},#{goodsNum},#{ipgoQty},#{ipgoDate},#{madeDate},#{ipgoPrice},#{empNum})
+    </insert>
+    <sql id="baseColumns">
+        ipgo_num , goods_num , ipgo_qty , ipgo_date , made_date , ipgo_price , emp_num
+    </sql>
+    <resultMap type="goodsIpgo" id="goodsIpgoResultMap">
+        <constructor> <!-- dto에 있는 멤버필드 순서와 같아야 합니다. -->
+            <idArg column="ipgo_num" javaType="string" />
+            <idArg column="goods_num" javaType="string" />
+            <arg column="ipgo_qty" javaType="integer"/>
+            <arg column="ipgo_date" javaType="java.util.Date"/>
+            <arg column="made_date" javaType="java.util.Date"/>
+            <arg column="ipgo_price" javaType="integer"/>
+            <arg column="emp_num" javaType="string"/>
+        </constructor>
+    </resultMap>
+    <select id="goodsIpgoAllSelect" resultMap="goodsIpgoResultMap"><!-- 여기서도 resultMap에서 생성자를 사용하겠습니다. -->
+        select <include refid="baseColumns"/>
+        from goodsIpgo_info
+        order by ipgo_num desc , goods_num
+    </select>
+    <select id="selectIpgoGoods" resultMap="goodsIpgoResultMap">
+        select <include refid="baseColumns"/>
+        from goodsIpgo_info
+        where ipgo_num = #{ipgoNum} and goods_num = #{goodsNum}
+    </select>
+    <update id="goodsIpgoUpdate" parameterType="goodsIpgo">
+        update goodsIpgo_info
+        set ipgo_Date = #{ipgoDate}, ipgo_qty =#{ipgoQty}
+        , made_date = #{madeDate} , ipgo_price = #{ipgoPrice}
+        where ipgo_num = #{ipgoNum} and goods_num = #{goodsNum}
+        <!-- dto로 받아왔으므로 멤버필드명을 사용한다 -->
+    </update>
+    <delete id="ipgoGoodsNumDelete">
+        delete from goodsIpgo_info
+        where ipgo_num = #{ipgoNum} and goods_num = #{goodsNum}
+    </delete>
+</mapper>

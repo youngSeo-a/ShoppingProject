@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/empMain_layout}">
+
+<th:block layout:fragment="css">
+    <style>
+        .content{
+            margin-top: 50px;
+            width: 80%;
+            height: 650px;
+        }
+        .container{
+            margin-top:200px;
+        }
+        .btn-area {
+            text-align: right;
+            margin-bottom: 10px;
+            margin-right: 5px;
+        }
+        .btn:hover{
+            color:#fff;
+        }
+        .input-text:focus{
+            box-shadow: 0px 0px 0px;
+            border-color:black;
+            outline: 0px;
+        }
+        .form-control {
+            border: 1px solid black;
+        }
+
+        input {
+            width: 100%;
+            border: 1px solid #bbb;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 14px;
+        }
+        .page .paging {
+            display: flex;
+            justify-content: center;
+        }
+        .del{
+            width: 45px;
+            height: 35px;
+            text-align: left;
+            background-color: white;
+            border: none;
+            font-weight: bold;
+        }
+        a {
+            text-decoration-line: none;
+            color: black;
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+    <a href="/goods/goodsForm">상품 추가</a>|
+    <a href="/goods/goodsIpgo">상품 입고</a>|
+    <a href="/goods/goodsIpgoList">상품 입고 현황</a>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 content">
+                <div class="input-group mb-3">
+                    <form action="/goods/goodsList" method="get" >
+                        <input type="text" class="form-control input-text" placeholder="검색하세요." aria-label="Recipient's username" aria-describedby="basic-addon2" name="searchWord"
+                               th:value="${searchWord}" />
+                    </form>
+                </div>
+                <div class='table-responsive'>
+                    <table class="table">
+                        <form action="/goods/productsDelete" method="post" id="frm">
+                            <colgroup>
+                                <col width="5%"/>
+                                <col width="20%"/>
+                                <col width="30%"/>
+                                <col width="20%"/>
+                                <col width="15%"/>
+                                <col width="10%"/>
+                            </colgroup>
+                            <thead>
+                            <tr>
+
+                                <th>번호</th>
+                                <th>상품번호</th>
+                                <th>상품명</th>
+                                <th>상품가격</th>
+                                <th>등록일</th>
+                                <th> <input type="checkbox" id="checkBoxs"/></th>
+                                <th><input type="submit" class="del" value="삭제"/></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="dto, cnt : ${data.getGoodsList}">
+                                <td>[[${cnt.count}]]</td>
+                                <td><a th:href="|goodsDetail?goodsNum=${dto.goodsNum}|">[[${dto.goodsNum}]]</a></td>
+                                <td><a th:href="@{goodsDetail(goodsNum=${dto.goodsNum})}">[[${dto.goodsName}]]</a></td>
+                                <td>[[${dto.goodsPrice}]]</td>
+                                <td>[[${#dates.format(dto.goodsRegist,'yyyy-MM-dd')}]]</td>
+                                <td> <input type="checkbox" name="memDels" th:value="${dto.goodsNum}" /></td>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </form>
+                    </table>
+                    <input type="hidden" id="nowPage" name="nowPage" th:value="${data.pageNum}">
+                    <div class="page">
+                        <nav aria-label="Page navigation example" class="paging">
+                            <ul class="pagination" th:utext="${data.pageHTML}">
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        function movePage(pageNum) {
+            //선택한 페이지번호를 가지고 화면을 다시 그립니다.
+            location.href ="/goods/goodsList?nowPage=" +  pageNum;
+        }
+        function goDetail(goodsNum) {
+            const nowPage = document.querySelector('#nowPage').value;
+            location.href ="/goods/goodsDetail?nowPage=" + nowPage +"&goodsNum=" + goodsNum;
+        }
+
+
+        $(function(){
+            $("#frm").submit(function(){
+                if($("input:checkbox[name=memDels]:checked").length < 1 ) {
+                    alert("하나이상 선택하세요.");
+                    return false;
+                }
+            });
+            //memDels를 체크를 하나씩 없애면 checkBoxs에 체크가 없어지고 모두 체크를 하면 checkBoxs도 체크가 되게한다.
+            $("input:checkbox[name=empDels]").click(function(){
+                //먼저 체크박스의 개수를 가지고 온다.
+                var tot = $("input:checkbox[name=empDels]").length;
+
+                //체크된 체크박스의 개수를 가지고 온다.
+                var checked = $("input:checkbox[name=empDels]:checked").length;
+                //두개를 비교한다.
+                if(tot == checked) {
+                    //같으면 checkBaxs에 체크를 한다.
+                    $("#checkBoxs").prop("checked",true)
+                }else {
+                    $("#checkBoxs").prop("checked",false)
+                }
+            });
+        });
+    </script>
+</div>
+</html>
+
+
+

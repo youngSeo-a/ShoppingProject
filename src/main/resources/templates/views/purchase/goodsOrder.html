@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/userMain_layout}">
+<th:block layout:fragment="css">
+    <style>
+        .body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .containers {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .section-header {
+            font-weight: bold;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .order-summary, .payment-summary, .delivery-summary {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            font-size: 0.9em;
+        }
+        th {
+            background-color: #f8f8f8;
+            font-weight: normal;
+        }
+        .product-img {
+            width: 80px;
+            height: auto;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .summary-section {
+            margin-bottom: 8px;
+        }
+        .summary-section input {
+            border:none ;
+            outline:none;
+            background-color: #f5f1f0;
+        }
+        .right-align {
+            text-align: right;
+        }
+        .total-amount {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .order-total td {
+            padding-top: 10px;
+        }
+        .place-order-btn {
+            display: block;
+            background-color: #ff5757;
+            color: #fff;
+            padding: 12px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            border: 1px solid #d9534f;
+        }
+        .place-order-btn:hover {
+            background-color: #ff4040;
+        }
+    </style>
+</th:block>
+<div layout:fragment="content">
+    <div class="body">
+        <div class="containers">
+            <!-- Order Summary Section -->
+            <div class="section-header">주문 정보</div>
+            <div class="order-summary">
+                <table>
+                    <tr>
+                        <th colspan="2">상품</th>
+                        <th>수량</th>
+                        <th>가격</th>
+                        <th>배송비</th>
+                    </tr>
+                    <tbody th:each="dto : ${list}">
+                    <tr>
+                        <td><img th:src="|/upload/${dto.goodsDTO.goodsMainStore}|" alt="product-img" class="product-img"></td>
+                        <td>[[${dto.goodsDTO.goodsName}]]</td>
+                        <td>[[${dto.cartDTO.cartQty}]]</td>
+                        <td>[[${dto.goodsDTO.goodsPrice}]]</td>
+                        <td><span th:if="${dto.goodsDTO.deliveryCost == 0}">무료배송</span>
+                            <span th:if="${dto.goodsDTO.deliveryCost != 0}" th:text="${dto.goodsDTO.deliveryCost}"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tr>
+                        <td colspan="4" class="right-align">상품금액:</td>
+                        <td>[[${sumTotalPrice}]] 원</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="right-align">배송비:</td>
+                        <td>[[${sumDeliveryCost}]] 원</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="right-align total-amount">총 결제금액:</td>
+                        <td class="total-amount">[[${sumPrice}]] 원</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Delivery Information Section -->
+            <form action="/purchase/goodsOrder" method="post" >
+                <input type="hidden" name="sumTotalPrice" th:value="${sumTotalPrice}" />
+                <input type="hidden" name="sumDeliveryCost" th:value="${sumDeliveryCost}" />
+                <input type="hidden" name="sumPrice" th:value="${sumPrice}" />
+                <input type="hidden" name="goodsNums" th:value="${goodsNums}" />
+                <div class="section-header">배송 정보</div>
+                <div class="delivery-summary">
+                    <div class="summary-section"><strong>받는 사람:</strong><input type="text" name="deliverName"/></div>
+                    <div class="summary-section"><strong>주소:</strong><input type="text" name="deliveryAddr"  id="sample4_roadAddress"
+                                                                            onclick="execDaumPostcode();" readonly="readonly"/></div>
+                    <div class="summary-section"><strong>상세주소: <input type="text" name="deliveryAddrDetail" /></strong></div>
+                    <div class="summary-section"><strong>우편번호: <input type="text" name="deliveryPost" id="sample4_postcode" readonly="readonly" /></strong></div>
+                    <div class="summary-section"><strong>전화번호: <input type="text" name="deliveryPhone" /></strong> </div>
+                    <div class="summary-section"><strong>주문메세지: <input type="text" name="message" /></strong></div>
+                </div>
+                <!-- Place Order Button -->
+                <input type="submit" class="place-order-btn" value="결제하기"/>
+
+                <!--            <a href="#" class="place-order-btn">결제하기</a>-->
+            </form>
+        </div>
+        <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+        <script src="/js/daumAddressScript.js"></script>
+        <!-- All JS Custom Plugins Link Here here -->
+        <script src="/assets/js/vendor/modernizr-3.5.0.min.js"></script>
+        <!-- Jquery, Popper, Bootstrap -->
+        <script src="/assets/js/vendor/jquery-1.12.4.min.js"></script>
+        <script src="/assets/js/popper.min.js"></script>
+        <script src="/assets/js/bootstrap.min.js"></script>
+        <!-- Jquery Mobile Menu -->
+        <script src="/assets/js/jquery.slicknav.min.js"></script>
+
+        <!-- Jquery Slick , Owl-Carousel Plugins -->
+        <script src="/assets/js/owl.carousel.min.js"></script>
+        <script src="/assets/js/slick.min.js"></script>
+
+        <!-- One Page, Animated-HeadLin -->
+        <script src="/assets/js/wow.min.js"></script>
+        <script src="/assets/js/animated.headline.js"></script>
+        <script src="/assets/js/jquery.magnific-popup.js"></script>
+
+        <!-- Scrollup, nice-select, sticky -->
+        <script src="/assets/js/jquery.scrollUp.min.js"></script>
+        <script src="/assets/js/jquery.nice-select.min.js"></script>
+        <script src="/assets/js/jquery.sticky.js"></script>
+
+        <!-- contact js -->
+        <script src="/assets/js/contact.js"></script>
+        <script src="/assets/js/jquery.form.js"></script>
+        <script src="/assets/js/jquery.validate.min.js"></script>
+        <script src="/assets/js/mail-script.js"></script>
+        <script src="/assets/js/jquery.ajaxchimp.min.js"></script>
+
+        <!-- Jquery Plugins, main Jquery -->
+        <script src="/assets/js/plugins.js"></script>
+        <script src="/assets/js/main.js"></script>
+    </div>
+</div>
+</html>

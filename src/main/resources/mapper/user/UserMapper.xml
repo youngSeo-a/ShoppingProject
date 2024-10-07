@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.web.code.mapper.member.UserMapper">
+    <insert id="userInsert" parameterType="memberDTO">
+        insert into member_info(member_num,member_id,member_pw,member_name,member_addr
+        ,member_addr_detail,member_post,member_phone
+        ,member_regist_date,member_birth,member_email
+        ,member_email_conf,member_point)
+        values((select concat('mem', coalesce(max(cast(substring(member_num, 4) AS unsigned)), 100000) + 1)
+        from member_info ALIAS_FOR_SUBQUERY)  <!-- 회원번호 자동부여 -->
+        ,#{memberId},#{memberPw},#{memberName}
+        ,#{memberAddr},#{memberAddrDetail},#{memberPost},#{memberPhone}
+        ,now(),#{memberBirth},#{memberEmail},null,0)
+    </insert>
+
+    <update id="userCheckUpdate" parameterType="string">
+        update member_info
+        set member_email_conf = 'T' <!-- 이메일 인증을 하면 member_email_conf을 null에서 T로 -->
+        where member_email_conf is null
+        and  member_email = #{email}
+    </update>
+
+    <select id="loginSelect" parameterType="string" resultType="authInfo">
+        <!-- 직원과 회원 중 아이디를 가지고 있는 사람을 첮기 위해 union사용 -->
+        <!-- grade는 회원인지 직원인지 구별하기 위해서 사용 -->
+        <!-- userEmailCheck는 이메일 인증을 한 사람인지 아닌지 확인 이메일 인증을 한 경우 T값을 가짐 -->
+        select member_id userId,member_pw userPw,member_name userName
+        ,'mem' grade ,member_email userEmail,member_email_conf userEmailCheck
+        from member_info
+        where member_id = #{userId}
+        union
+        select emp_id, emp_pw, emp_name, 'emp', emp_email  , 'T'
+        from emp_info
+        where emp_id = #{userId}
+    </select>
+</mapper>

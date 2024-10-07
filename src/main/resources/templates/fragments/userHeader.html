@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="header">
+  <header>
+    <!-- Header Start -->
+    <div class="header-area">
+      <div class="main-header ">
+        <div class="header-top top-bg d-none d-lg-block">
+          <div class="container-fluid">
+            <div class="col-xl-12">
+              <div class="row d-flex justify-content-between align-items-center">
+                <div class="header-info-left d-flex">
+                  <div></div>
+                </div>
+                <div class="header-info-right">
+                  <ul>
+                    <div th:if="${session.auth == null}">
+                      <a href="/login/login">관리자로그인 </a>
+                    </div>
+                    <div th:if="${session.auth != null}">
+                      <th:block th:if="${session.auth.grade == 'mem'}"  >
+                        <li><a href="/mypage/myDetail">내정보 보기</a></li><!-- 회원내정보 보기 -->
+                        <li><a href="/corner/wishList">관심 목록</a></li> <!-- 관심상품 목록 보기 -->
+                        <li><a href="/corner/cartList" >장바구니</a></li> <!-- 장바구니로 가기 -->
+                        <li><a href="/purchase/orderList" >주문목록</a></li><!-- 주문한 내역을 확인 하기 -->
+                      </th:block>
+                    </div>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="header-bottom  header-sticky">
+          <div class="container-fluid">
+            <div class="row align-items-center">
+              <!-- Logo -->
+              <div class="col-xl-1 col-lg-1 col-md-1 col-sm-3">
+                <div class="logo">
+                  <a href="/shopping"><img src="/assets/img/logo/logo.png" alt=""></a>
+                </div>
+              </div>
+              <div class="col-xl-6 col-lg-8 col-md-7 col-sm-5">
+                <!-- Main-menu -->
+                <div class="main-menu f-right d-none d-lg-block">
+                  <nav>
+                    <ul id="navigation">
+                      <li><a href="#">신상품</a></li>
+                      <li><a href="#">카테고리</a>
+                        <ul class="submenu">
+                          <li><a href="#">코트/자켓</a></li>
+                          <li><a href="#">점퍼</a></li>
+                          <li><a href="#">니트</a></li>
+                          <li><a href="#">셔츠</a></li>
+                          <li><a href="#">상의</a></li>
+                          <li><a href="">하의</a></li>
+                          <li><a href="#">악세서리</a></li>
+                        </ul>
+                      </li>
+                      <li class="#"><a href="#">특가/혜택</a>  </li>
+                      <li><a href="#">베스트</a></li>
+                      <li><a href="#">이벤트</a></li>
+                      <li><a href="contact.html">문의</a></li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+              <div class="col-xl-5 col-lg-3 col-md-3 col-sm-3 fix-card">
+                <ul class="header-right f-right d-none d-lg-block d-flex justify-content-between">
+                  <li class="d-none d-xl-block">
+                    <div class="form-box f-right ">
+                      <form action="/shopping" method="get">
+                      <input type="text" name="searchWord" placeholder="상품을 검색하세요." th:value="${searchWord}" />
+                      <div class="search-icon">
+                        <i class="fas fa-search special-tag"></i>
+                      </div>
+                      </form>
+                    </div>
+                  </li>
+                  <div th:if="${session.auth == null}">
+                    <li class="d-none d-lg-block"> <a href="/login/userLogin" class="btn header-btn">로그인</a>
+                      <a href="/register/userWrite" class="btn header-btn">회원가입</a></li>
+                  </div>
+                  <div th:if="${session.auth != null}">
+                    <th:block th:if="${session.auth.grade == 'mem'}"  >
+                      <li class="d-none d-lg-block">
+                        [[${session.auth.userName}]] 님<a href="/login/item.logout" class="btn header-btn">로그아웃</a></li>
+                    </th:block>
+                  </div>
+                </ul>
+              </div>
+              <!-- Mobile Menu -->
+              <div class="col-12">
+                <div class="mobile_menu d-block d-lg-none"></div>
+              </div>
+<!--              <input type="hidden" id="nowPage" name="nowPage" th:value="${data.pageNum}">-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Header End -->
+  </header>
+<!--  <script>-->
+<!--    function movePage(goodsNum) {-->
+<!--      //선택한 페이지번호를 가지고 화면을 다시 그립니다.-->
+<!--      location.href ="/shopping?nowPage=" +  pageNum;-->
+<!--    }-->
+
+<!--  </script>-->
+</div>
+</html>

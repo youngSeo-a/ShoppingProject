@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.web.code.mapper.employee.EmployeeMapper">
+    <sql id="employeeBaseColumns">
+        emp_num,emp_id,emp_pw,emp_name,emp_addr
+        ,emp_addr_detail,emp_post,emp_enter_date
+        ,emp_phone,emp_email, emp_jumin
+    </sql>
+    <select id="autoNum" resultType="string">
+        SELECT CONCAT('emp', COALESCE(MAX(CAST(SUBSTRING(emp_num, 4) AS UNSIGNED)), 100000) + 1)
+        FROM emp_info
+
+    </select>
+    <insert id="employeeInsert" parameterType="emp" >
+        insert into emp_info( <include refid="employeeBaseColumns" />)
+        values( #{empNum},#{empId} ,#{empPw} ,#{empName} ,#{empAddr}
+        ,#{empAddrDetail} ,#{empPost}
+        ,now() ,#{empPhone} ,#{empEmail},#{empJumin})
+    </insert>
+
+    <!-- select 한 데이터를 EmployeeDTO로 받아오려면 컬럼명을 EmployeeDTO에 있는 멤버필드명으로 별칭을 줘야한다.-->
+    <!-- 그런데 include를 해서 별칭을 줄 수가 없다. 다른 방법은 resultMap을 사용하는 방법이 있다. -->
+    <resultMap type="emp" id="employeeResultMap">
+        <!-- 이 방법은 dto에 있는 SETTER를 이용한 방법이다. -->
+        <!-- id는 primary키인경우 result는 일반 컬럼 -->
+        <!--     컬럼명        멤버필드명   -->
+        <id column="emp_num"  property="empNum"/>
+        <result column="emp_id" property="empId"/>
+        <result column="emp_pw" property="empPw"/>
+        <result column="emp_name" property="empName"/>
+        <result column="emp_addr" property="empAddr"/>
+        <result column="emp_addr_detail" property="empAddrDetail"/>
+        <result column="emp_post" property="empPost"/>
+        <result column="emp_enter_date" property="empRegiDate"/>
+        <result column="emp_phone" property="empPhone"/>
+        <result column="emp_email" property="empEmail"/>
+        <result column="emp_jumin" property="empJumin"/>
+    </resultMap>
+    <select id="employeeAllSelect" resultMap="employeeResultMap"  parameterType="map" >
+        select <include refid="employeeBaseColumns"></include> from
+        emp_info
+        <where>
+            <if test="searchWord != null">
+                (emp_name LIKE CONCAT('%', #{searchWord}, '%')
+                OR emp_id LIKE CONCAT('%', #{searchWord}, '%')
+                OR emp_num LIKE CONCAT('%', #{searchWord}, '%'))
+            </if>
+        </where>
+        order by emp_num
+        limit #{start}, #{end}
+    </select>
+
+    <select id="employeeCount" parameterType="string" resultType="integer">
+        select count(*) from emp_info
+        <if test='searchWord != null'>
+            <where>
+                (emp_name LIKE CONCAT('%', #{searchWord}, '%')
+                OR emp_id LIKE CONCAT('%', #{searchWord}, '%')
+                OR emp_num LIKE CONCAT('%', #{searchWord}, '%'))
+            </where>
+        </if>
+    </select>
+
+    <delete id="employeesDelete" parameterType="string">
+        delete from emp_info where emp_num in
+        <foreach collection="employeesNum" item="employeeNum" close=")" open="(" separator=","
+                 index="index">
+            #{employeeNum}
+        </foreach>
+    </delete>
+
+    <select id="employeeOneSelect"  parameterType="string" resultMap="employeeResultMap">
+        select <include refid="employeeBaseColumns" />
+        from emp_info
+        where emp_num = #{empNum}
+    </select>
+
+    <update id="employeeUpdate" parameterType="emp">
+        update emp_info
+        set emp_name = #{empName}
+        , emp_addr =#{empAddr}
+        <if test="empAddrDetail != null">
+            , emp_addr_detail = #{empAddrDetail}
+        </if>
+        , emp_post =#{empPost}
+        , emp_phone = #{empPhone}
+        , emp_jumin = #{empJumin}
+        , emp_enter_date = #{empRegiDate}
+        where emp_num = #{empNum}
+    </update>
+
+    <delete id="employeeDelete" parameterType="string">
+        delete from emp_info where emp_num = #{empNum}
+    </delete>
+    <select id="getEmpNum" parameterType="string" resultType="string">
+        select emp_num from emp_info
+        where emp_id = #{empId}
+    </select>
+</mapper>

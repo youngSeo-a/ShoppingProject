@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 20px;
+        }
+        .containers {
+            width: 775px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        h1 {
+            font-size: 24px;
+            text-align: center;
+            color: #333;
+        }
+        .review-item {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .review-author {
+            font-weight: bold;
+            color: #555;
+        }
+        .review-date {
+            font-size: 12px;
+            color: #888;
+        }
+        .review-content {
+            margin-top: 10px;
+            line-height: 1.6;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<div class="containers">
+        <div class="review-item">
+            <th:block th:each=" dto : ${list}">
+            <div class="review-header">
+                <div class="review-author">[[${dto.memberId}]]</div>
+                <div class="review-date">[[${#dates.format(dto.reviewDate,'yyyy-MM-dd')}]]</div>
+            </div>
+            <div class="review-content">
+         	<span
+                    th:utext="${#strings.replace(dto.reviewContent, newLineChar, '&lt;br /&gt;')}"></span>
+            </div>
+            </th:block>
+        </div>
+</div>
+
+</body>
+</html>

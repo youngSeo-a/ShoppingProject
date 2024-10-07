@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/userMain_layout}">
+
+<div layout:fragment="content">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Fonts START -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css">
+    <!-- Fonts END -->
+
+    <!-- Global styles START -->
+    <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Global styles END -->
+
+    <!--    Page level plugin styles START-->
+    <link href="/assets/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet">
+    <link href="/assets/plugins/owl.carousel/assets/owl.carousel.css" rel="stylesheet">
+    <link href="/assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css">
+    <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css"><!-- for slider-range -->
+    <!-- Page level plugin styles END -->
+
+    <!-- Theme styles START -->
+    <link href="/assets/pages/css/components.css" rel="stylesheet">
+    <link href="/assets/corporate/css/style.css" rel="stylesheet">
+    <link href="/assets/pages/css/style-shop.css" rel="stylesheet" type="text/css">
+    <link href="/assets/corporate/css/style-responsive.css" rel="stylesheet">
+    <link href="/assets/corporate/css/themes/red.css" rel="stylesheet" id="style-color">
+    <link href="/assets/corporate/css/custom.css" rel="stylesheet">
+    <!-- Theme styles END -->
+
+    <div class="ecommerce">
+        <div class="main">
+            <div class="container">
+                <!-- BEGIN SIDEBAR & CONTENT -->
+                <div class="row margin-bottom-40">
+                    <!-- BEGIN SIDEBAR -->
+                    <div class="sidebar col-md-3 col-sm-5">
+                        <ul class="list-group margin-bottom-25 sidebar-menu">
+                            <ul class="dropdown-menu" style="display:block;">
+                                <li class="list-group-item dropdown clearfix active">
+                                    <a href="shop-product-list.html" class="collapsed"><i class="fa fa-angle-right"></i> 나의 쇼핑 정보 </a>
+                                    <ul class="dropdown-menu" style="display:block;">
+                                        <li class="list-group-item dropdown clearfix">
+                                            <a href="shop-product-list.html"><i class="fa fa-angle-right"></i>장바구니</a>
+                                        </li>
+                                        <li class="list-group-item dropdown clearfix">
+                                            <a href="shop-product-list.html"><i class="fa fa-angle-right"></i> 주문/배송 </a>
+                                        </li>
+                                        <li class="list-group-item dropdown clearfix active">
+                                            <a href="shop-product-list.html" class="collapsed"><i class="fa fa-angle-right"></i> 취소/반품  </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="list-group-item dropdown clearfix active">
+                                    <a href="shop-product-list.html" class="collapsed"><i class="fa fa-angle-right"></i>나의 혜택 정보 </a>
+                                    <ul class="dropdown-menu" style="display:block;">
+                                        <li class="list-group-item dropdown clearfix">
+                                            <a href="shop-product-list.html"><i class="fa fa-angle-right"></i> 적립금 </a>
+                                        </li>
+                                        <li class="list-group-item dropdown clearfix">
+                                            <a href="shop-product-list.html"><i class="fa fa-angle-right"></i> 쿠폰</a>
+                                        </li>
+                                        <li class="list-group-item dropdown clearfix active">
+                                            <a href="shop-product-list.html" class="collapsed"><i class="fa fa-angle-right"></i>혜택보기 </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="list-group-item dropdown clearfix active">
+                                    <a href="shop-product-list.html" class="collapsed"><i class="fa fa-angle-right"></i>나의 활동 정보 </a>
+                                    <ul class="dropdown-menu" style="display:block;">
+                                        <li class="list-group-item dropdown clearfix">
+                                            <a href="shop-product-list.html"><i class="fa fa-angle-right"></i> 회원정보 수정 </a>
+                                        </li>
+                                        <li class="list-group-item dropdown clearfix">
+                                            <a href="shop-product-list.html"><i class="fa fa-angle-right"></i> 배송 주소록 관리</a>
+                                        </li>
+                                        <li class="list-group-item dropdown clearfix active">
+                                            <a href="shop-product-list.html" class="collapsed"><i class="fa fa-angle-right"></i>나의 게시물 관리 </a>
+                                        </li>
+                                        <li class="list-group-item dropdown clearfix">
+                                            <a href="shop-product-list.html"><i class="fa fa-angle-right"></i> 나의 문의 관리 </a>
+                                        </li>
+                                        <li class="list-group-item dropdown clearfix">
+                                            <a href="shop-product-list.html"><i class="fa fa-angle-right"></i>위시리스트</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <!-- END SIDEBAR -->
+
+                    <!-- BEGIN CONTENT -->
+                    <div class="col-md-9 col-sm-7">
+                        <table width="800" align = "center">
+                            <div style="text-align: center"><h2>구매 목록</h2></div>
+                            <br/>
+                            <tr><td>주문일(결제번호)</td> <td>상품명(이미지) / 주문번호</td>
+                                <td>주문상태</td>
+                            </tr>
+                            <tr th:each=" orderListDTO : ${list}" >
+                                <td>[[${#dates.format(orderListDTO.purchaseDTO.purchaseDate,'yyyy-MM-dd')}]](
+                                    <!-- 결제 시간이 없다는 건 아직 결제가 안되었다는 의. -->
+                                    <th:block th:if="${orderListDTO.paymentDTO.appltime == null}">
+                                        결제대기중
+                                    </th:block>
+                                    <!-- 결제 시간이 있다는 건 결제가 이루어졌다는 의미. -->
+                                    <th:block th:if="${orderListDTO.paymentDTO.appltime != null}">
+                                        <!-- 현금결제인 경우 승인번호가 없을 수 있음. -->
+                                        <th:block th:if="${orderListDTO.paymentDTO.confirmnumber == null}">
+                                            <!-- 결제시간은 있는데 승인번호가 없다는 건 --> 현금결제
+                                        </th:block>
+                                        <th:block th:if="${orderListDTO.paymentDTO.confirmnumber != null}">
+                                            [[${orderListDTO.paymentDTO.confirmnumber}]]<!-- 승인번호 -->
+                                        </th:block>
+                                    </th:block>
+                                    )</td>
+                                <!-- 결제정보 하나에 상품은 여러개 일 수 있어 collection으로 받아온다. -->
+                                <td>
+                                    <th:block th:each="dto : ${orderListDTO.purchaseListGoodsDTOs}" >
+                                        <img th:src="|/upload/${dto.goods.goodsMainStore}|" width="30" />
+                                        ([[${dto.goods.goodsName}]])
+                                    </th:block>
+                                    / [[${orderListDTO.purchaseDTO.purchaseNum}]]</td>
+                                <td>
+                                    <!-- 상품준비중인 경우 결제취소는 안보이고 상품준비중으로 표시되게 한다. -->
+                                    <th:block th:if="${orderListDTO.paymentDTO.appltime != null}">
+                                        <th:block th:if="${orderListDTO.deliveryDTO.deliveryNumber == null}">
+                                            <!-- 두개가 같은 조건이어야 하므로 하나로 묶음. -->
+                                            <span th:if="${orderListDTO.purchaseDTO.purchaseStatus =='결제완료'}">
+    						<a th:href="|paymentDel?purchaseNum=${orderListDTO.purchaseDTO.purchaseNum}|">결제취소</a>
+    					</span>
+                                            <span th:if="${orderListDTO.purchaseDTO.purchaseStatus =='상품준비중' }">
+    						상품준비중
+    					</span>
+                                        </th:block >
+                                        <!-- 구매확정을 하였으니 구매확정이 아닐 때만 표시를 하고 구매 확정인 경우에 표시되지 않게 한다. -->
+                                        <th:block th:if="${orderListDTO.purchaseDTO.purchaseStatus !='구매확정' }">
+                                            <!-- 배송정보가 있는 경우에는 배송중이나 배송완료가 출력되게 변경한다. -->
+                                            <span th:if="${orderListDTO.deliveryDTO.deliveryNumber != null }">[[${orderListDTO.deliveryDTO.deliveryState}]]</span>
+                                            <!-- 이제 주문상태에 따라 상태정보가 다 출력되게 하였음. -->
+                                            <!-- 이제 배송완료가 되면 구매확정을 하도록한다. -->
+                                            <span th:if="${orderListDTO.deliveryDTO.deliveryState == '배송완료'}">
+    					<a th:href="@{/purchase/purchaseOk(purchaseNum=${orderListDTO.purchaseDTO.purchaseNum})}">주문확정</a>
+    				</span>
+                                        </th:block>
+                                        <!-- 구매확정이면 구매확정이라고 출력되고 후기를 작성하도록한다. -->
+                                        <th:block th:if="${orderListDTO.purchaseDTO.purchaseStatus =='구매확정' }">
+                                            <!-- 후기를 쓰려면 후기가 있는지 알아야 하므로 후기를 가지고와야한다. -->
+                                            구매확정 |
+                                            <!-- 후기는 주문번호 하나에 여러개의 상품이고 각 상품별로 후기를 달아야 하므로 collection으로 받아옴. -->
+                                            <th:block th:each="dto : ${orderListDTO.purchaseListGoodsDTOs}">
+                                                <!-- 후기는 구매확정이고 후기가 없어야 한다. -->
+                                                <a th:if="${dto.review == null}" th:href="@{/review/goodsReview(goodsNum=${dto.goods.goodsNum}
+    				   								,purchaseNum=${orderListDTO.purchaseDTO.purchaseNum})}">후기쓰기</a>
+                                                <!-- 이제 후기를 등록했으니 수정 또는 삭제. -->
+                                                <th:block th:if="${dto.review != null}">
+                                                    <a th:href="@{/review/goodsReviewUpdate(reviewNum=${dto.review.reviewNum},
+    															goodsNum=${dto.goods.goodsNum})}">후기 수정</a> |
+                                                    <a th:href="@{/review/goodsReviewDelete(reviewNum=${dto.review.reviewNum},
+    															goodsNum=${dto.goods.goodsNum})}">후기 삭제</a>
+                                                </th:block>
+                                            </th:block>
+
+                                        </th:block>
+
+                                    </th:block>
+                                    <th:block th:if="${orderListDTO.paymentDTO.appltime == null}">
+                                        <!-- 이미 만들어져 있어서 경로만 잡아주면 됩니다. -->
+                                        <a th:href="|paymentOk?purchaseNum=${orderListDTO.purchaseDTO.purchaseNum}|">결제하기</a>
+                                    </th:block>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- END CONTENT -->
+        </div>
+        <!-- END SIDEBAR & CONTENT -->
+    </div>
+
+
+<script src="/assets/plugins/jquery.min.js" type="text/javascript"></script>
+<script src="/assets/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<script src="/assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/assets/corporate/scripts/back-to-top.js" type="text/javascript"></script>
+<script src="/assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<!-- END CORE PLUGINS -->
+
+<!-- BEGIN PAGE LEVEL JAVASCRIPTS (REQUIRED ONLY FOR CURRENT PAGE) -->
+<script src="/assets/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script><!-- pop up -->
+<script src="/assets/plugins/owl.carousel/owl.carousel.min.js" type="text/javascript"></script><!-- slider for products -->
+<script src='/assets/plugins/zoom/jquery.zoom.min.js' type="text/javascript"></script><!-- product zoom -->
+<script src="/assets/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script><!-- Quantity -->
+<script src="/assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="/assets/corporate/scripts/layout.js" type="text/javascript"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/js/scripts.js"></script>
+
+<!-- All JS Custom Plugins Link Here here -->
+<script src="/assets/js/vendor/modernizr-3.5.0.min.js"></script>
+<!-- Jquery, Popper, Bootstrap -->
+<script src="/assets/js/vendor/jquery-1.12.4.min.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<!-- Jquery Mobile Menu -->
+<script src="/assets/js/jquery.slicknav.min.js"></script>
+
+<!-- Jquery Slick , Owl-Carousel Plugins -->
+<script src="/assets/js/owl.carousel.min.js"></script>
+<script src="/assets/js/slick.min.js"></script>
+
+<!-- One Page, Animated-HeadLin -->
+<script src="/assets/js/wow.min.js"></script>
+<script src="/assets/js/animated.headline.js"></script>
+<script src="/assets/js/jquery.magnific-popup.js"></script>
+
+<!-- Scrollup, nice-select, sticky -->
+<script src="/assets/js/jquery.scrollUp.min.js"></script>
+<script src="/assets/js/jquery.nice-select.min.js"></script>
+<script src="/assets/js/jquery.sticky.js"></script>
+
+<!-- contact js -->
+<script src="/assets/js/contact.js"></script>
+<script src="/assets/js/jquery.form.js"></script>
+<script src="/assets/js/jquery.validate.min.js"></script>
+<script src="/assets/js/mail-script.js"></script>
+<script src="/assets/js/jquery.ajaxchimp.min.js"></script>
+
+<!-- Jquery Plugins, main Jquery -->
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
+</div>
+</html>
+
+
+

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="sidebar">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav" th:if="${session.auth != null}">
+                    <th:block th:if="${session.auth.grade == 'emp'}"  >
+                        <br/>
+                        <br/>
+                        <a class="nav-link" href="/employee/employeeList">
+                            <h2> 직원 목록</h2>
+                        </a>
+                        <br/>
+                        <a class="nav-link" href="/member/memberList">
+                            <h2> 회원 목록</h2>
+                        </a>
+                        <br/>
+                        <a class="nav-link" href="/goods/goodsList">
+                            <h2> 상품리스트</h2>
+                        </a>
+                        <br/>
+                        <a class="nav-link" href="/purchase/purchaseList">
+                            <h2> 주문 내역</h2>
+                        </a>
+                        <br/>
+                        <a class="nav-link" href="/inquire/goodsQuestion">
+                            <h2> 상품 문의</h2>
+                        </a>
+                        <br/>
+                    </th:block>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+</html>

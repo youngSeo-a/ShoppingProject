@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/userMain_layout}">
+<th:block layout:fragment="css">
+    <style>
+        .body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f7f7f7;
+            font-weight: bold;
+            font-size: 14px;
+            color: #333;
+        }
+
+        td {
+            font-size: 21px;
+            color: #555;
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+
+
+        .quantity-controls button {
+            padding: 5px 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .quantity-controls input {
+            width: 40px;
+            text-align: center;
+            border: 1px solid #ddd;
+            margin: 0 5px;
+            padding: 5px;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+
+        .delete-button {
+            padding: 8px 12px;
+            background-color: #ff5a5f;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .delete-button:hover {
+            background-color: #007bff;
+        }
+
+        .summary {
+            margin-top: 20px;
+            text-align: right;
+            margin-right: 10%;
+            font-size: 16px;
+        }
+
+        .summary .total {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            margin-top: 20px;
+            text-align: right;
+            margin-right: 10%;
+        }
+
+        .action-buttons input {
+            padding: 10px 20px;
+            margin-left: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .action-buttons input:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</th:block>
+<div layout:fragment="content">
+    <div>
+        <form action="/purchase/goodsBuy" method="post" >
+        <table>
+            <thead>
+            <tr>
+                <th><input type="checkbox"></th>
+                <th>상품 이미지</th>
+                <th>상품명</th>
+                <th>수량</th>
+                <th>합계 금액</th>
+                <th>배송비</th>
+                <th><input type="button" class="delete-button" value="선택 상품 삭제" onclick="del1();"/></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each=" dto: ${list}">
+                <td><input type="checkbox" name="prodCk" checked="checked" th:value="${dto.goodsDTO.goodsNum}"/></td>
+                <td><img th:src="|/upload/${dto.goodsDTO.goodsMainStore}|" class="product-image" /></td>
+                <td>[[${dto.goodsDTO.goodsName}]]</td>
+                <td><a th:href="|javascript:checkQty('${dto.goodsDTO.goodsNum}');|"> - </a>
+                    <span th:id="${dto.goodsDTO.goodsNum}">[[${dto.cartDTO.cartQty}]]</span>
+                    <a th:href="|javascript:cartAdd('${dto.goodsDTO.goodsNum}','${dto.goodsDTO.goodsPrice}')|"> + </a>
+                </td>
+                <td><span th:id="${'t_'+ dto.goodsDTO.goodsNum}" class="totalPrice">[[${dto.totalPrice}]]</span></td>
+                <td><span class="deliveryCost">[[${dto.goodsDTO.deliveryCost}]]</span></td>
+                <td><input type="button"  class="delete-button" value="삭제" th:attr="onclick=|del('${dto.goodsDTO.goodsNum}');|"/></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="summary">
+            상품수 : <span id="prodCnt">[[${list.size}]]</span>개<br />
+            전체 금액 : <span id="sumPrice">[[${sumPrice}]]</span>원<br />
+        </div>
+
+        <div class="action-buttons">
+            <input type="submit" value="구매하기" />
+        </div>
+        </form>
+    </div>
+
+    <!-- All JS Custom Plugins Link Here here -->
+    <script src="/assets/js/vendor/modernizr-3.5.0.min.js"></script>
+    <!-- Jquery, Popper, Bootstrap -->
+    <script src="/assets/js/vendor/jquery-1.12.4.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <!-- Jquery Mobile Menu -->
+    <script src="/assets/js/jquery.slicknav.min.js"></script>
+
+    <!-- Jquery Slick , Owl-Carousel Plugins -->
+    <script src="/assets/js/owl.carousel.min.js"></script>
+    <script src="/assets/js/slick.min.js"></script>
+
+    <!-- One Page, Animated-HeadLin -->
+    <script src="/assets/js/wow.min.js"></script>
+    <script src="/assets/js/animated.headline.js"></script>
+    <script src="/assets/js/jquery.magnific-popup.js"></script>
+
+    <!-- Scrollup, nice-select, sticky -->
+    <script src="/assets/js/jquery.scrollUp.min.js"></script>
+    <script src="/assets/js/jquery.nice-select.min.js"></script>
+    <script src="/assets/js/jquery.sticky.js"></script>
+
+    <!-- contact js -->
+    <script src="/assets/js/contact.js"></script>
+    <script src="/assets/js/jquery.form.js"></script>
+    <script src="/assets/js/jquery.validate.min.js"></script>
+    <script src="/assets/js/mail-script.js"></script>
+    <script src="/assets/js/jquery.ajaxchimp.min.js"></script>
+
+    <!-- Jquery Plugins, main Jquery -->
+    <script src="/assets/js/plugins.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $("#checkBoxs").click(function(){
+                if($("#checkBoxs").prop("checked")){
+                    $("input:checkbox[name=prodCk]").prop("checked", true);
+                }else{
+                    $("input:checkbox[name=prodCk]").prop("checked", false);
+                }
+                goodsChk();
+            });
+            $("input:checkbox[name=prodCk]").click(function(){
+                var tot = $("input:checkbox[name=prodCk]").length;
+                var checked = $("input:checkbox[name=prodCk]:checked").length;
+                if(tot == checked){
+                    $("#checkBoxs").prop("checked",true);
+                }else{
+                    $("#checkBoxs").prop("checked",false);
+                }
+                //체크할때마다 이므로 여기서 함수 실행
+                goodsChk();
+            });
+        });
+        // 선택항목 삭제를 하겠습니다
+        function del1(){
+            // 선택항목들을 배열에 저장하겠습니다.
+            var chk_arr = [];
+            // 체크박스들 중 체크가 되어 있는 항목을 찾기 위해 반복문을 사용하겠습니다.
+            $("input[name='prodCk']:checked").each(function(){
+                //체크가 되어 있는 체크박스의 값을 배열에 저장하겠습니다. 체크박스의 값은 상품번호입니다.
+                chk_arr.push($(this).val());
+            });
+            // 배열을 ajax를 통해 서버쪽으로 전달하겠습니다.
+            $.ajax({
+                url: "cartDels" ,
+                type : "post",
+                dataType:"text",
+                // 배열 데이터를 전송합니다.
+                data:{"goodsNums" : chk_arr},
+                success : function(result){
+                    // 정상적으로 처리가 되면 200값을 받아오도록합니다.
+                    if(result == "200"){
+                        // 정상적으로 처리가 되었다면 새로고침하겠습니다.
+                        location.reload();
+                    }else{
+                        alert("삭제되지 않았습니다.");
+                    }
+                },
+                error : function () {
+                    alert("삭제할 상품을 하나 이상 선택하여 주세요.");
+                }
+            });
+        }
+        function del(goodsNum){
+            // location.reload()를 할 것 같으면 그냥 동기식이 더 편할 것 같아요... 이번에 그냥 동기식으로 하겠습니다.
+            location.href="cartDel?goodsNum="+goodsNum;
+        }
+        function goodsChk(){
+            // 먼저 체크 되어 있는 테크박스를 확인 해야 하겠지요..
+            // 체크박스를 가지고 오겠습니다.
+            var chkLeng  = $("input[name=prodCk]");
+            // 몇개가 체크되어 있는지 변수 선언
+            var cnt = 0;
+            // 총합계 금액 변수 선언
+            var sumPrice = 0;
+            // 체크박스 를 돌리면서 체크된 것을 찾아 수량과 금액을 더합니다.
+            for(var i = 0; i < chkLeng.length; i++){
+                if(chkLeng[i].checked == true){ // 체크가 되어 있는 체크박스를 확인
+                    cnt++; // 수량증가 , i번째 값들을 더하겠습니다. 이때 배송비도 같이
+                    sumPrice += Number($(".totalPrice:eq("+i+")").text())
+                        +  Number($(".deliveryCost:eq("+i+")").text());
+                }
+            }
+            $("#prodCnt").text(cnt);
+            $("#sumPrice").text(sumPrice);
+        }
+        function cartAdd(goodsNum , goodsPrice){
+            $.ajax({
+                type : "get",
+                // 수량증가는 이미 코드가 만들어져 있습니다. 주소가 cartAdd입니다.
+                url : "cartAdd",
+                dataType : "text", // 수량은 한개씩 넘기면 됩니다.
+                data : {"goodsNum" : goodsNum , "qty" : 1},
+                success : function(result){
+                    if(result.trim() == "200"){
+                        // 정상적으로 처리되면 수량과 금액이 바뀌어야 한다. 문자를 숫자로 변환
+                        $("#"+goodsNum).text(Number($("#"+goodsNum).text()) + 1);
+                        $("#t_"+goodsNum).text(Number($("#t_"+goodsNum).text()) + Number(goodsPrice));
+                    }
+                },
+                error : function(){
+                    alert('에러가 나왔다 홀홀홀~');
+                }, // 수량의 변화에 따라 합계금액을 다시 계산 하려면 goodsChk()함수를 실행 시킵니다.
+                complete:goodsChk //complete은 successe되고 나서 실행됩니다.
+            });
+        }
+        function checkQty(goodsNum){
+            // 수량이 최소 하나를 초과해야 감소시킬 수 있습니다.
+            if($("#"+goodsNum).text() > 1 ){
+                $.ajax({
+                    type : "get",
+                    dataType : "text",
+                    url : "cartQtyDown",
+                    data : {"goodsNum" : goodsNum},
+                    success : function(result){// ObjectMapper객체를 받아오겠습니다.
+                        var data = JSON.parse(result);// ObjectMapper를 JSON으로 변환합니다.
+                        $("#"+goodsNum).text(data.cartDTO.cartQty);
+                        $("#t_"+goodsNum).text(data.cartDTO.cartQty * data.goodsDTO.goodsPrice);
+                    },
+                    error : function(){
+                        alert('에러가 나왔다 홀홀홀~');
+                    }, // 감소시킨 후 금액을 다시 계산해야 합니다.
+                    complete:goodsChk
+                });
+            }else{
+                alert("최소 수량이 1이어야 합니다.");
+                return false;
+            }
+        }
+    </script>
+</div>
+</html>
+
